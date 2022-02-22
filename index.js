@@ -143,6 +143,26 @@ const spawnDominos = () => {
     }
 }
 
+const removeBlockingDominos = () => {
+    for (let y = 0; y < grid.length; y++) {
+        const row = grid[y]
+        for (let x = 0; x < row.length; x++) {
+            const cell = row[x]
+            if (!cell) continue
+            if (cell === 'right' && x < row.length - 1 && row[x + 1] === 'left') {
+                row[x] = ''
+                row[x + 1] = ''
+                continue
+            }
+            const x_ = downIndex(y, x)
+            if (cell === 'down' && y < grid.length - 1 && grid[y + 1][x_] === 'up') {
+                row[x] = ''
+                grid[y + 1][x_] = ''
+            }
+        }
+    }
+}
+
 
 const increaseButton = document.querySelector('[data-increase]')
 increaseButton.addEventListener('click', () => {
@@ -157,6 +177,11 @@ moveButton.addEventListener('click', () => {
 const spawnButton = document.querySelector('[data-spawn]')
 spawnButton.addEventListener('click', () => {
     spawnDominos()
+    drawGrid()
+})
+const removeButton = document.querySelector('[data-remove]')
+removeButton.addEventListener('click', () => {
+    removeBlockingDominos()
     drawGrid()
 })
 const showButton = document.querySelector('[data-show]')
