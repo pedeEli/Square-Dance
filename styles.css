@@ -50,14 +50,12 @@ body {
 }
 
 .grid {
-    --size: 200px;
+    --size: 500px;
     --cells: 2;
     --cell-size: calc(var(--size) / var(--cells));
     display: grid;
     grid-template-columns: repeat(var(--cells), var(--cell-size));
     grid-template-rows: repeat(var(--cells), var(--cell-size));
-    width: var(--size);
-    height: var(--size);
 }
 
 .domino {
