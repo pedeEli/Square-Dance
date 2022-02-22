@@ -6,25 +6,8 @@ const arrows = {
     right: document.querySelector('[data-right-arrow]')
 }
 
-let cells = 4
-// let grid = [
-//     ['', 'up', 'up', ''],
-//     ['left', 'down', 'down', 'right'],
-//     ['left', 'up', 'up', 'right'],
-//     ['', 'down', 'down', '']
-// ]
-let grid = [
-    ['', 'left', 'right', ''],
-    ['', 'left', 'right', ''],
-    ['', 'up', 'up', ''],
-    ['', '', '', '']
-]
-
-// let cells = 2
-// let grid = [
-//     ['left', 'right'],
-//     ['left', 'right']
-// ]
+let cells = 2
+let grid = [['', ''], ['', '']]
 
 const createDomino = dir => {
     const div = document.createElement('div')
@@ -118,7 +101,27 @@ const moveGrid = () => {
     }
 }
 
-drawGrid()
+const spawnDominos = () => {
+    const hc = cells / 2
+    for (let y = 0; y < cells; y++) {
+        for (let x = 0; x < cells; x++) {
+            if (Math.abs(x - hc + 0.5) + Math.abs(y - hc + .5) >= hc + 1) continue
+            if (grid[y][x]) continue
+            console.log({x, y});
+            if (Math.random() > 0.5) {
+                grid[y    ][x    ] = 'up'
+                grid[y    ][x + 1] = 'up'
+                grid[y + 1][x    ] = 'down'
+                grid[y + 1][x + 1] = 'down'
+                continue
+            }
+            grid[y    ][x    ] = 'left'
+            grid[y    ][x + 1] = 'right'
+            grid[y + 1][x    ] = 'left'
+            grid[y + 1][x + 1] = 'right'
+        }
+    }
+}
 
 
 const increaseButton = document.querySelector('[data-increase]')
@@ -129,5 +132,10 @@ increaseButton.addEventListener('click', () => {
 const moveButton = document.querySelector('[data-move]')
 moveButton.addEventListener('click', () => {
     moveGrid()
+    drawGrid()
+})
+const spawnButton = document.querySelector('[data-spawn]')
+spawnButton.addEventListener('click', () => {
+    spawnDominos()
     drawGrid()
 })
