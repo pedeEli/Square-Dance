@@ -17,10 +17,18 @@ const createDomino = dir => {
     return div
 }
 
-const createEmpty = () => {
+const createEmpty = (l = 1) => {
     const div = document.createElement('div')
-    div.style.gridColumn = `span 1`
+    div.style.gridColumn = `span ${l}`
     return div
+}
+
+const upIndex = (y, x) => {
+    return x + Math.sign(y - cells / 2)
+}
+
+const downIndex = (y, x) => {
+    return x - Math.sign(y - cells / 2 + 1)
 }
 
 const drawGrid = () => {
@@ -28,97 +36,109 @@ const drawGrid = () => {
     while (gridRef.firstChild)
         gridRef.firstChild.remove()
     const created = new Set()
-    for (let y = 0; y < cells; y++) {
+
+    for (let y = 0; y < grid.length; y++) {
         const row = grid[y]
-        for (let x = 0; x < cells; x++) {
+        const emptySize = Math.floor(Math.abs(y - cells / 2 + .5))
+        if (emptySize)
+            gridRef.appendChild(createEmpty(emptySize))
+
+        for (let x = 0; x < row.length; x++) {
             if (created.has(y * cells + x)) continue
             const cell = row[x]
             if (!cell) {
                 gridRef.appendChild(createEmpty())
                 continue
             }
+            
+            gridRef.appendChild(createDomino(cell))
             if (cell.match(/up|down/)) {
-                gridRef.appendChild(createDomino(cell))
-                x++
+                created.add(y * cells + x + 1)
                 continue
             }
-            created.add(y * cells + cells + x)
-            gridRef.appendChild(createDomino(cell))
+            const x_ = downIndex(y, x)
+            created.add(y * cells + cells + x_)
         }
+        
+        if (emptySize)
+            gridRef.appendChild(createEmpty(emptySize))
     }
 }
 
 const increaseGrid = () => {
     cells += 2
-    let newGrid = [Array(cells).fill('')]
+    let newGrid = [['', '']]
+
     for (let y = 0; y < grid.length; y++) {
         const row = grid[y]
         const newRow = ['']
-        for (x = 0; x < row.length; x++) {
+        for (let x = 0; x < row.length; x++) {
             newRow.push(row[x])
         }
         newRow.push('')
         newGrid.push(newRow)
     }
-    newGrid.push(Array(cells).fill(''))
+    newGrid.push(['', ''])
     grid = newGrid
 }
 
 const moveGrid = () => {
-    const moved = new Set()
-    for (let i = 0; i < 2; i++) {
-        for (let y = 0; y < cells; y++) {
-            const row = grid[y]
-            for (let x = 0; x < cells; x++) {
-                if (moved.has(y * cells + x)) continue
-                const cell = row[x]
-                if (!cell) continue
-                if (cell === 'up' && y > 0 && !grid[y - 1][x]) {
-                    grid[y - 1][x] = 'up'
-                    row[x] = ''
-                    moved.add(y * cells - cells + x)
-                    continue
-                }
-                if (cell === 'down' && y < cells - 1 && !grid[y + 1][x]) {
-                    grid[y + 1][x] = 'down'
-                    row[x] = ''
-                    moved.add(y * cells + cells + x)
-                    continue
-                }
-                if (cell === 'left' && x > 0 && !row[x - 1]) {
-                    row[x - 1] = 'left'
-                    row[x] = ''
-                    moved.add(y * cells + x - 1)
-                    continue
-                }
-                if (cell === 'right' && x < cells - 1  && !row[x + 1]) {
-                    row[x + 1] = 'right'
-                    row[x] = ''
-                    moved.add(y * cells + x + 1)
-                }
+    const toAdd = new Map()
+    const newGrid = []
+
+    for (let y = 0; y < grid.length; y++) {
+        const row = grid[y]
+        const newRow = []
+        for (let x = 0; x < row.length; x++) {
+            if (toAdd.has(y * cells + x))
+                newRow.push(toAdd.get(y * cells + x))
+            else 
+                newRow.push('')
+            
+            const cell = row[x]
+            if (cell === 'left') {
+                newRow[x - 1] = 'left'
+                continue
+            }
+            if (cell === 'right') {
+                toAdd.set(y * cells + x + 1, 'right')
+                continue
+            }
+            if (cell === 'up') {
+                const x_ = upIndex(y, x)
+                newGrid[y - 1][x_] = 'up'
+                continue
+            }
+            if (cell === 'down') {
+                const x_ = downIndex(y, x)
+                toAdd.set((y + 1) * cells + x_, 'down')
             }
         }
+        newGrid.push(newRow)
     }
+    grid = newGrid
 }
 
 const spawnDominos = () => {
-    const hc = cells / 2
-    for (let y = 0; y < cells; y++) {
-        for (let x = 0; x < cells; x++) {
-            if (Math.abs(x - hc + 0.5) + Math.abs(y - hc + .5) >= hc + 1) continue
-            if (grid[y][x]) continue
-            console.log({x, y});
-            if (Math.random() > 0.5) {
-                grid[y    ][x    ] = 'up'
-                grid[y    ][x + 1] = 'up'
-                grid[y + 1][x    ] = 'down'
-                grid[y + 1][x + 1] = 'down'
+    for (let y = 0; y < grid.length; y++) {
+        const row = grid[y]
+        for (let x = 0; x < row.length; x++) {
+            if (row[x]) continue
+
+            const x_ = downIndex(y, x)
+            const y_ = y + 1
+
+            if (Math.random() > .5) {
+                row[x] = 'up'
+                row[x + 1] = 'up'
+                grid[y_][x_] = 'down'
+                grid[y_][x_ + 1] = 'down'
                 continue
             }
-            grid[y    ][x    ] = 'left'
-            grid[y    ][x + 1] = 'right'
-            grid[y + 1][x    ] = 'left'
-            grid[y + 1][x + 1] = 'right'
+            row[x] = 'left'
+            row[x + 1] = 'right'
+            grid[y_][x_] = 'left'
+            grid[y_][x_ + 1] = 'right'
         }
     }
 }
@@ -139,3 +159,5 @@ spawnButton.addEventListener('click', () => {
     spawnDominos()
     drawGrid()
 })
+const showButton = document.querySelector('[data-show]')
+showButton.addEventListener('click', () => console.log(grid))
