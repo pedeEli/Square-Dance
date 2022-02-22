@@ -6,11 +6,86 @@
 
 :root {
     font-family: 'Roboto', sans-serif;
+    color: white;
 
     --bg-clr: 0 0% 10%;
+
+    --up-clr: 240 60% 50%;
+    --down-clr: 120 60% 30%;
+    --left-clr: 60 70% 55%;
+    --right-clr: 0 60% 40%;
 }
 
 body {
     margin: 0;
+    height: 100vh;
+    width: 100vw;
     background-color: hsl(var(--bg-clr));
+
+    display: grid;
+    grid-template-rows: 5rem auto;
+    grid-template-columns: 300px auto;
+}
+
+.controls {
+    border-right: 1px solid white;
+}
+
+.heading {
+    margin: 0;
+    height: 100%;
+    font-size: 3rem;
+    letter-spacing: .2rem;
+    grid-column: 1 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.square-dance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid {
+    --size: 200px;
+    --cells: 2;
+    --cell-size: calc(var(--size) / var(--cells));
+    display: grid;
+    grid-template-columns: repeat(var(--cells), var(--cell-size));
+    grid-template-rows: repeat(var(--cells), var(--cell-size));
+    width: var(--size);
+    height: var(--size);
+}
+
+.domino {
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.domino svg {
+    fill: white;
+    width: 60%;
+    height: 60%;
+}
+
+.domino.up {
+    grid-column: span 2;
+    background-color: hsl(var(--up-clr));
+}
+.domino.down {
+    grid-column: span 2;
+    background-color: hsl(var(--down-clr));
+}
+.domino.left {
+    grid-row: span 2;
+    background-color: hsl(var(--left-clr));
+}
+.domino.right {
+    grid-row: span 2;
+    background-color: hsl(var(--right-clr));
 }
