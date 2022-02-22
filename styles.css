@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+:root {
+    font-family: 'Roboto', sans-serif;
+
+    --bg-clr: 0 0% 10%;
+}
+
+body {
+    margin: 0;
+    background-color: hsl(var(--bg-clr));
+}
