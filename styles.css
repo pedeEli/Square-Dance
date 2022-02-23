@@ -51,7 +51,7 @@ body {
 }
 
 .grid {
-    --size: 500px;
+    --size: 800px;
     --cells: 2;
     --cell-size: calc(var(--size) / var(--cells));
     display: grid;
@@ -93,17 +93,22 @@ body {
     background-color: hsl(var(--right-clr));
 }
 
-.animate-move .domino.up {
+.animate-move .domino.up, .animate-move.domino.up {
     transform: translateY(-100%)
 }
-.animate-move .domino.down {
+.animate-move .domino.down, .animate-move.domino.down {
     transform: translateY(100%)
 }
-.animate-move .domino.left {
+.animate-move .domino.left, .animate-move.domino.left {
     transform: translateX(-100%)
 }
-.animate-move .domino.right {
+.animate-move .domino.right, .animate-move.domino.right {
     transform: translateX(100%)
+}
+
+.domino.fade-out {
+    transition: 700ms ease;
+    animation: domino-fade-out 450ms ease forwards;
 }
 
 .orange-box {
@@ -142,5 +147,14 @@ body {
     }
     100% {
         opacity: 1;
+    }
+}
+
+@keyframes domino-fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
     }
 }

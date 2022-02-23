@@ -153,23 +153,37 @@ const spawnDominos = () => {
 }
 
 const removeBlockingDominos = () => {
+    const positions = []
     for (let y = 0; y < grid.length; y++) {
         const row = grid[y]
         for (let x = 0; x < row.length; x++) {
             const cell = row[x]
             if (!cell) continue
+
+            const x_ = downIndex(y, x)
+            const y_ = y + 1
+
+            const i1 = y  * cells + x
+            const i2 = y_ * cells + x_
+
             if (cell === 'right' && x < row.length - 1 && row[x + 1] === 'left') {
+                positions.push([i1, i2, 'vertical'])
                 row[x] = ''
                 row[x + 1] = ''
+                grid[y_][x_] = ''
+                grid[y_][x_ + 1] = ''
                 continue
             }
-            const x_ = downIndex(y, x)
             if (cell === 'down' && y < grid.length - 1 && grid[y + 1][x_] === 'up') {
+                positions.push([i1, i2, 'horizontal'])
                 row[x] = ''
-                grid[y + 1][x_] = ''
+                row[x + 1] = ''
+                grid[y_][x_] = ''
+                grid[y_][x_ + 1] = ''
             }
         }
     }
+    return positions
 }
 
 
@@ -257,6 +271,32 @@ const replaceEmptiesWithDominos = (c1, c3, i1, i2, dir) => {
 }
 // --------------------------------------------------------------------------
 
+// animating remove ---------------------------------------------------------
+const animateRemoveBlocking = () => {
+    const positions = removeBlockingDominos()
+    positions.forEach(([i1, i2, dir], index) => {
+        setTimeout(() => {
+            const ds = getRemoveByIndex(i1, i2, dir)
+            ds.forEach(d => d.classList.add('animate-move', 'fade-out'))
+        }, index * 200)
+    })
+}
+const getRemoveByIndex = (i1, i2, dir) => {
+    if (dir === 'horizontal') {
+        const d1 = gridRef.querySelector(`[data-index="${i1}"]`)
+        const d2 = gridRef.querySelector(`[data-index="${i2}"]`)
+        return [d1, d2]
+    }
+    if (dir === 'vertical') {
+        const d1 = gridRef.querySelector(`[data-index="${i1}"]`)
+        const d2 = gridRef.querySelector(`[data-index="${i1 + 1}"]`)
+        return [d1, d2]
+    }
+    throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
+}
+// --------------------------------------------------------------------------
+
+
 const moveButton = document.querySelector('[data-move]')
 moveButton.addEventListener('click', () => {
     animateMove()
@@ -264,13 +304,12 @@ moveButton.addEventListener('click', () => {
 const spawnButton = document.querySelector('[data-spawn]')
 spawnButton.addEventListener('click', () => {
     animateSpawn()
-    // spawnDominos()
-    // drawGrid()
 })
 const removeButton = document.querySelector('[data-remove]')
 removeButton.addEventListener('click', () => {
-    removeBlockingDominos()
-    drawGrid()
+    animateRemoveBlocking()
+    // removeBlockingDominos()
+    // drawGrid()
 })
 const showButton = document.querySelector('[data-show]')
 showButton.addEventListener('click', () => console.log(grid))
