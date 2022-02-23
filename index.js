@@ -163,39 +163,29 @@ const removeBlockingDominos = () => {
     }
 }
 
-drawGrid()
 
-
-const animateIncrease = () => {
+const animateMove = () => {
     const size = parseInt(getComputedStyle(gridRef).getPropertyValue('--size'))
     const targetCellSize = size / (cells + 2)
     gridRef.style.setProperty('--size', `${targetCellSize * cells}px`)
     gridRef.addEventListener('transitionend', () => {
-        increaseGrid()
-        gridRef.style.setProperty('--size', `${size}px`)
-        drawGrid()
+        gridRef.classList.add('animate-move')
+        setTimeout(() => {
+            gridRef.addEventListener('transitionend', () => {
+                gridRef.classList.remove('animate-move')
+                gridRef.style.setProperty('--size', `${size}px`)
+                increaseGrid()
+                moveGrid()
+                drawGrid()
+            }, {once: true})
+        })
     }, {once: true})
 }
 
-const animateMove = () => {
-    gridRef.classList.add('animate-move')
-    gridRef.addEventListener('transitionend', () => {
-        gridRef.classList.remove('animate-move')
-        moveGrid()
-        drawGrid()
-    }, {once: true})
-}
 
-
-const increaseButton = document.querySelector('[data-increase]')
-increaseButton.addEventListener('click', () => {
-    animateIncrease()
-})
 const moveButton = document.querySelector('[data-move]')
 moveButton.addEventListener('click', () => {
     animateMove()
-    // moveGrid()
-    // drawGrid()
 })
 const spawnButton = document.querySelector('[data-spawn]')
 spawnButton.addEventListener('click', () => {
