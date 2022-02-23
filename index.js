@@ -9,17 +9,19 @@ const arrows = {
 let cells = 2
 let grid = [['', ''], ['', '']]
 
-const createDomino = dir => {
+const createDomino = (dir, index) => {
     const div = document.createElement('div')
     div.classList.add('domino', dir)
     div.appendChild(arrows[dir].content.cloneNode(true))
-    div.setAttribute(`data-${dir}`, '')
+    div.dataset.index = index
     return div
 }
 
-const createEmpty = (l = 1) => {
+const createEmpty = (l, index) => {
     const div = document.createElement('div')
     div.style.gridColumn = `span ${l}`
+    if (index !== undefined)
+        div.dataset.index = index
     return div
 }
 
@@ -47,11 +49,11 @@ const drawGrid = () => {
             if (created.has(y * cells + x)) continue
             const cell = row[x]
             if (!cell) {
-                gridRef.appendChild(createEmpty())
+                gridRef.appendChild(createEmpty(1, y * cells + x))
                 continue
             }
             
-            gridRef.appendChild(createDomino(cell))
+            gridRef.appendChild(createDomino(cell, y * cells + x))
             if (cell.match(/up|down/)) {
                 created.add(y * cells + x + 1)
                 continue
@@ -120,6 +122,7 @@ const moveGrid = () => {
 }
 
 const spawnDominos = () => {
+    const positions = []
     for (let y = 0; y < grid.length; y++) {
         const row = grid[y]
         for (let x = 0; x < row.length; x++) {
@@ -128,19 +131,25 @@ const spawnDominos = () => {
             const x_ = downIndex(y, x)
             const y_ = y + 1
 
+            const i1 = y  * cells + x
+            const i2 = y_ * cells + x_
+
             if (Math.random() > .5) {
                 row[x] = 'up'
                 row[x + 1] = 'up'
                 grid[y_][x_] = 'down'
                 grid[y_][x_ + 1] = 'down'
+                positions.push([i1, i2, 'horizontal'])
                 continue
             }
+            positions.push([i1, i2, 'vertical'])
             row[x] = 'left'
             row[x + 1] = 'right'
             grid[y_][x_] = 'left'
             grid[y_][x_ + 1] = 'right'
         }
     }
+    return positions
 }
 
 const removeBlockingDominos = () => {
@@ -182,6 +191,71 @@ const animateMove = () => {
     }, {once: true})
 }
 
+drawGrid()
+
+// animating spawning in ----------------------------------------------------
+const animateSpawn = () => {
+    const spawnPositions = spawnDominos()
+    spawnPositions.forEach(([i1, i2, dir], index) => {
+
+        setTimeout(() => {
+            animateSpawnDomino(i1, i2, dir)
+        }, index * 200)
+    })
+}
+const animateSpawnDomino = (i1, i2, dir, callback) => {
+    const c1 = gridRef.querySelector(`[data-index="${i1}"]`)
+
+    c1.classList.add('orange-box')
+    c1.addEventListener('animationend', () => {
+        const domino = fillOrangeBoxWithDominos(c1, dir)
+        animateSpawnDominoFadeIn(domino, i1, i2, dir, c1, callback)
+    }, {once: true})
+}
+const animateSpawnDominoFadeIn = (domino, i1, i2, dir, c1, callback) => {
+    const c2 = c1.nextElementSibling
+    const c3 = gridRef.querySelector(`[data-index="${i2}"]`)
+    const c4 = c3.nextElementSibling
+
+    domino.addEventListener('animationend', () => {
+        c1.style.backgroundColor = 'hsl(var(--orange-clr) / 0)'
+        c1.addEventListener('transitionend', () => {
+            replaceEmptiesWithDominos(c1, c3, i1, i2, dir)
+            c1.remove()
+            c2.remove()
+            c3.remove()
+            c4.remove()
+            if (typeof callback === 'function') callback()
+        }, {once: true})
+    }, {once: true})
+}
+const fillOrangeBoxWithDominos = (c1, dir) => {
+    if (dir === 'horizontal') {
+        const domino = createDomino('up')
+        c1.append(domino, createDomino('down'))
+        return domino
+    }
+    if (dir === 'vertical') {
+        const domino = createDomino('left')
+        c1.append(domino, createDomino('right'))
+        return domino
+    }
+    throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
+}
+const replaceEmptiesWithDominos = (c1, c3, i1, i2, dir) => {
+    if (dir === 'horizontal') {
+        c1.after(createDomino('up', i1))
+        c3.after(createDomino('down', i2))
+        return
+    }
+    if (dir === 'vertical') {
+        c1.after(createDomino('right', i1 + 1))
+        c1.after(createDomino('left', i1))
+        return
+    }
+    throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
+}
+// --------------------------------------------------------------------------
 
 const moveButton = document.querySelector('[data-move]')
 moveButton.addEventListener('click', () => {
@@ -189,8 +263,9 @@ moveButton.addEventListener('click', () => {
 })
 const spawnButton = document.querySelector('[data-spawn]')
 spawnButton.addEventListener('click', () => {
-    spawnDominos()
-    drawGrid()
+    animateSpawn()
+    // spawnDominos()
+    // drawGrid()
 })
 const removeButton = document.querySelector('[data-remove]')
 removeButton.addEventListener('click', () => {

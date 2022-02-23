@@ -14,6 +14,7 @@
     --down-clr: 120 60% 30%;
     --left-clr: 60 70% 55%;
     --right-clr: 0 60% 40%;
+    --orange-clr: 32 80% 50%;
 }
 
 body {
@@ -103,4 +104,43 @@ body {
 }
 .animate-move .domino.right {
     transform: translateX(100%)
+}
+
+.orange-box {
+    background-color: hsl(var(--orange-clr));
+    transform-origin: top left;
+    animation: orange-box 500ms ease forwards;
+    border-radius: .5rem;
+
+    transition: background-color 500ms ease;
+
+    display: grid;
+    grid-template-columns: repeat(2, calc(var(--cell-size) / 2));
+    grid-template-rows: repeat(2, calc(var(--cell-size) / 2));
+}
+.orange-box .domino {
+    border-radius: .5rem;
+    animation: domino-fade-in 500ms ease forwards;
+}
+
+@keyframes orange-box {
+    0% {
+        transform: scale(0%, 0%);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(200%, 200%);
+    }
+}
+
+@keyframes domino-fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
