@@ -1,0 +1,58 @@
+.domino {
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: 500ms ease;
+}
+
+.domino svg {
+    fill: white;
+    width: 60%;
+    height: 60%;
+}
+
+.domino.up {
+    grid-column: span 2;
+    background-color: hsl(var(--up-clr));
+}
+.domino.down {
+    grid-column: span 2;
+    background-color: hsl(var(--down-clr));
+}
+.domino.left {
+    grid-row: span 2;
+    background-color: hsl(var(--left-clr));
+}
+.domino.right {
+    grid-row: span 2;
+    background-color: hsl(var(--right-clr));
+}
+
+.animate-move .domino.up, .animate-move.domino.up {
+    transform: translateY(-100%)
+}
+.animate-move .domino.down, .animate-move.domino.down {
+    transform: translateY(100%)
+}
+.animate-move .domino.left, .animate-move.domino.left {
+    transform: translateX(-100%)
+}
+.animate-move .domino.right, .animate-move.domino.right {
+    transform: translateX(100%)
+}
+
+.domino.fade-out {
+    transition: 700ms ease;
+    animation: domino-fade-out 450ms ease forwards;
+}
+
+@keyframes domino-fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
