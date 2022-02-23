@@ -56,6 +56,8 @@ body {
     display: grid;
     grid-template-columns: repeat(var(--cells), var(--cell-size));
     grid-template-rows: repeat(var(--cells), var(--cell-size));
+
+    transition: 500ms ease;
 }
 
 .domino {

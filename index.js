@@ -165,10 +165,22 @@ const removeBlockingDominos = () => {
 
 drawGrid()
 
+
+const animateIncrease = () => {
+    const size = parseInt(getComputedStyle(gridRef).getPropertyValue('--size'))
+    const targetCellSize = size / (cells + 2)
+    gridRef.style.setProperty('--size', `${targetCellSize * cells}px`)
+    gridRef.addEventListener('transitionend', () => {
+        increaseGrid()
+        gridRef.style.setProperty('--size', `${size}px`)
+        drawGrid()
+    }, {once: true})
+}
+
+
 const increaseButton = document.querySelector('[data-increase]')
 increaseButton.addEventListener('click', () => {
-    increaseGrid()
-    drawGrid()
+    animateIncrease()
 })
 const moveButton = document.querySelector('[data-move]')
 moveButton.addEventListener('click', () => {
