@@ -2,6 +2,7 @@
 
 *, *::after, *::before {
     box-sizing: border-box;
+    user-select: none;
 }
 
 :root {
@@ -15,6 +16,8 @@
     --left-clr: 60 70% 55%;
     --right-clr: 0 60% 40%;
     --orange-clr: 32 80% 50%;
+
+    --btn-clr: 0 0% 20%;
 }
 
 body {
@@ -41,5 +44,4 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    user-select: none;
 }

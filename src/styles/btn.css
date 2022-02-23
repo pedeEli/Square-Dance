@@ -1,0 +1,54 @@
+.btn {
+    all: unset;
+    font-size: 1.5rem;
+    margin: .5em;
+    padding: .5em 1em;
+    background-color: hsl(var(--btn-clr));
+    border-radius: 100vh;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: filter 200ms ease;
+}
+.btn.green {
+    background-color: hsl(var(--down-clr));
+}
+.btn.blue {
+    background-color: hsl(var(--up-clr));
+}
+.btn:hover {
+    filter: brightness(1.2);
+}
+.btn:focus {
+    outline: 2px solid white;
+}
+
+.btn span {
+    position: relative;
+    z-index: 1;
+}
+
+.btn div {
+    content: "";
+    position: absolute;
+    top: var(--y);
+    left: var(--x);
+    width: var(--size);
+    height: var(--size);
+    background-color: white;
+    border-radius: 50%;
+    z-index: 0;
+    transform-origin: center;
+    animation: expand 800ms ease-out forwards;
+}
+
+@keyframes expand {
+    0% {
+        transform: translate(-50%, -50%) scale(0%);
+        opacity: 0.3;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(100%);
+        opacity: 0;
+    }
+}

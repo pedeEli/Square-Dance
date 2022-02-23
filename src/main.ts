@@ -2,6 +2,7 @@ import './styles/main.css'
 import './styles/domino.css'
 import './styles/grid.css'
 import './styles/orangeBox.css'
+import './styles/btn.css'
 
 import {drawGrid} from './ts/grid/index'
 import {animateMove} from './ts/grid/dominoMove'
@@ -10,16 +11,19 @@ import {animateRemoveBlocking} from './ts/grid/dominoRemoveBlocking'
 
 drawGrid()
 
+import {createButton} from './ts/btn'
 
-const moveButton = document.querySelector('[data-move]')!
+const controls = document.querySelector('[data-controls]')!
+const moveButton = createButton('Move')
+const spawnButton = createButton('Spawn')
+const removeButton = createButton('Remove')
 moveButton.addEventListener('click', () => {
     animateMove()
 })
-const spawnButton = document.querySelector('[data-spawn]')!
 spawnButton.addEventListener('click', () => {
     animateSpawn()
 })
-const removeButton = document.querySelector('[data-remove]')!
 removeButton.addEventListener('click', () => {
     animateRemoveBlocking()
 })
+controls.append(moveButton, spawnButton, removeButton)
