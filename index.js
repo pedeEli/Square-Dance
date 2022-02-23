@@ -163,6 +163,7 @@ const removeBlockingDominos = () => {
     }
 }
 
+drawGrid()
 
 const increaseButton = document.querySelector('[data-increase]')
 increaseButton.addEventListener('click', () => {
@@ -186,3 +187,12 @@ removeButton.addEventListener('click', () => {
 })
 const showButton = document.querySelector('[data-show]')
 showButton.addEventListener('click', () => console.log(grid))
+
+const nextButton = document.querySelector('[data-next]')
+nextButton.addEventListener('click', () => {
+    removeBlockingDominos()
+    increaseGrid()
+    moveGrid()
+    spawnDominos()
+    drawGrid()
+})
