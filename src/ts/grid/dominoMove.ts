@@ -1,4 +1,4 @@
-import {grid, cells, upIndex, downIndex, gridRef, drawGrid} from "./grid";
+import {grid, cells, upIndex, downIndex, gridRef, drawGrid} from "./index";
 
 const increaseGrid = () => {
     cells.value += 2

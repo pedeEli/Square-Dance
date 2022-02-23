@@ -3,10 +3,10 @@ import './styles/domino.css'
 import './styles/grid.css'
 import './styles/orangeBox.css'
 
-import {drawGrid} from './ts/grid'
-import {animateMove} from './ts/dominoMove'
-import {animateSpawn} from './ts/dominoSpawn'
-import {animateRemoveBlocking} from './ts/dominoRemoveBlocking'
+import {drawGrid} from './ts/grid/index'
+import {animateMove} from './ts/grid/dominoMove'
+import {animateSpawn} from './ts/grid/dominoSpawn'
+import {animateRemoveBlocking} from './ts/grid/dominoRemoveBlocking'
 
 drawGrid()
 

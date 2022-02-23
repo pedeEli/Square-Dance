@@ -1,4 +1,4 @@
-import {grid, downIndex, cells, gridRef, createDomino} from './grid'
+import {grid, downIndex, cells, gridRef, createDomino} from './index'
 
 const spawnDominos = (): [number, number, Orientation][] => {
     const positions: [number, number, Orientation][] = []

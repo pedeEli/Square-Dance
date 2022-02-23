@@ -1,4 +1,4 @@
-import {grid, downIndex, cells, gridRef} from './grid'
+import {grid, downIndex, cells, gridRef} from './index'
 
 const removeBlockingDominos = (): [number, number, Orientation][] => {
     const positions: [number, number, Orientation][] = []
