@@ -177,6 +177,15 @@ const animateIncrease = () => {
     }, {once: true})
 }
 
+const animateMove = () => {
+    gridRef.classList.add('animate-move')
+    gridRef.addEventListener('transitionend', () => {
+        gridRef.classList.remove('animate-move')
+        moveGrid()
+        drawGrid()
+    }, {once: true})
+}
+
 
 const increaseButton = document.querySelector('[data-increase]')
 increaseButton.addEventListener('click', () => {
@@ -184,8 +193,9 @@ increaseButton.addEventListener('click', () => {
 })
 const moveButton = document.querySelector('[data-move]')
 moveButton.addEventListener('click', () => {
-    moveGrid()
-    drawGrid()
+    animateMove()
+    // moveGrid()
+    // drawGrid()
 })
 const spawnButton = document.querySelector('[data-spawn]')
 spawnButton.addEventListener('click', () => {
