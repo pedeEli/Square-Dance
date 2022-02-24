@@ -70,6 +70,7 @@ const drawGrid = () => {
 
 export {
     gridRef,
+    arrows,
     cells,
     grid,
     createDomino,

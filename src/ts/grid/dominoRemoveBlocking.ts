@@ -34,17 +34,24 @@ const removeBlockingDominos = (): [number, number, Orientation][] => {
     return positions
 }
 
-const animateRemoveBlocking = () => {
+const animateRemoveBlocking = (callback?: () => void) => {
     const positions = removeBlockingDominos()
+    if (!positions.length) {
+        if (callback) setTimeout(callback)
+        return
+    }
     positions.forEach(([i1, i2, dir], index) => {
         setTimeout(() => {
-            const ds = getRemoveByIndex(i1, i2, dir)
-            ds.forEach(d => d.classList.add('animate-move', 'fade-out'))
+            const [d1, d2] = getRemoveByIndex(i1, i2, dir)
+            d1.classList.add('animate-move', 'fade-out')
+            d2.classList.add('animate-move', 'fade-out')
+            if (index === positions.length - 1 && callback)
+                d1.addEventListener('transitionend', callback, {once: true})
         }, index * 200)
     })
 }
 
-const getRemoveByIndex = (i1: number, i2: number, dir: Orientation) => {
+const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [Element, Element] => {
     if (dir === 'horizontal') {
         const d1 = gridRef.querySelector(`[data-index="${i1}"]`)!
         const d2 = gridRef.querySelector(`[data-index="${i2}"]`)!

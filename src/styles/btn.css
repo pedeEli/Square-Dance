@@ -8,7 +8,9 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: filter 200ms ease;
+    transition: filter 200ms ease,
+        background-color 200ms ease,
+        color 200ms ease;
 }
 .btn.green {
     background-color: hsl(var(--green-clr));
@@ -16,11 +18,15 @@
 .btn.blue {
     background-color: hsl(var(--blue-clr));
 }
-.btn:hover {
+.btn:hover:enabled {
     filter: brightness(1.2);
 }
 .btn:focus {
     outline: 2px solid white;
+}
+.btn:disabled {
+    background-color: hsl(var(--btn-disabled-clr));
+    color: hsl(var(--btn-disabled-text-clr));
 }
 
 .btn span {

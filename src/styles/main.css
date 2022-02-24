@@ -18,6 +18,8 @@
     --orange-clr: 32 80% 50%;
 
     --btn-clr: 0 0% 20%;
+    --btn-disabled-clr: 0 0% 30%;
+    --btn-disabled-text-clr: 0 0% 50%;
 }
 
 body {

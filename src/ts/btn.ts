@@ -1,9 +1,9 @@
 
 
-const createButton = (str: string) => {
+const createButton = (...nodes: (string | Node)[]) => {
     const btn = document.createElement('button')
     const span = document.createElement('span')
-    span.append(str)
+    span.append(...nodes)
     btn.append(span)
     btn.classList.add('btn')
     btn.addEventListener('click', event => {
@@ -12,7 +12,7 @@ const createButton = (str: string) => {
     })
     btn.addEventListener('keydown', event => {
         if (event.key !== 'Enter') return
-        const {width, height, x, y} = btn.getBoundingClientRect()
+        const {width, height} = btn.getBoundingClientRect()
         animateClick(Math.max(width, height) * 2, width / 2, height / 2, btn)
     })
     return btn

@@ -54,7 +54,7 @@ const moveGrid = () => {
     grid.value = newGrid
 }
 
-const animateMove = () => {
+const animateMove = (callback?: () => void) => {
     const size = parseInt(getComputedStyle(gridRef).getPropertyValue('--size'))
     const targetCellSize = size / (cells.value + 2)
     gridRef.style.setProperty('--size', `${targetCellSize * cells.value}px`)
@@ -67,6 +67,7 @@ const animateMove = () => {
                 increaseGrid()
                 moveGrid()
                 drawGrid()
+                if (callback) callback()
             }, {once: true})
         })
     }, {once: true})

@@ -31,10 +31,12 @@ const spawnDominos = (): [number, number, Orientation][] => {
     return positions
 }
 
-const animateSpawn = () => {
+const animateSpawn = (callback?: () => void) => {
     const spawnPositions = spawnDominos()
     spawnPositions.forEach(([i1, i2, dir], index) => {
         setTimeout(() => {
+            if (index === spawnPositions.length - 1)
+                return animateSpawnDomino(i1, i2, dir, callback)
             animateSpawnDomino(i1, i2, dir)
         }, index * 200)
     })

@@ -11,19 +11,27 @@ import {animateRemoveBlocking} from './ts/grid/dominoRemoveBlocking'
 
 drawGrid()
 
+let nextStep: Step = 'spawn'
+
 import {createButton} from './ts/btn'
 
 const controls = document.querySelector('[data-controls]')!
-const moveButton = createButton('Move')
-const spawnButton = createButton('Spawn')
-const removeButton = createButton('Remove')
-moveButton.addEventListener('click', () => {
-    animateMove()
+const nextStepButton = createButton('Next step')
+controls.append(nextStepButton)
+nextStepButton.addEventListener('click', () => {
+    if (nextStep === 'spawn') {
+        animateSpawn(() => nextStepButton.disabled = false)
+        nextStepButton.disabled = true
+        nextStep = 'remove'
+        return
+    }
+    if (nextStep === 'move') {
+        animateMove(() => nextStepButton.disabled = false)
+        nextStepButton.disabled = true
+        nextStep = 'spawn'
+        return
+    }
+    animateRemoveBlocking(() => nextStepButton.disabled = false)
+    nextStepButton.disabled = true
+    nextStep = 'move'
 })
-spawnButton.addEventListener('click', () => {
-    animateSpawn()
-})
-removeButton.addEventListener('click', () => {
-    animateRemoveBlocking()
-})
-controls.append(moveButton, spawnButton, removeButton)
