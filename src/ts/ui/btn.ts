@@ -1,9 +1,9 @@
+type ButtonElement = HTMLButtonElement & {setText: (str: string) => void}
 
-
-const createButton = (...nodes: (string | Node)[]) => {
-    const btn = document.createElement('button')
+const createButton = (str: string) => {
+    const btn = document.createElement('button') as ButtonElement
     const span = document.createElement('span')
-    span.append(...nodes)
+    span.innerText = str
     btn.append(span)
     btn.classList.add('btn')
     btn.addEventListener('click', event => {
@@ -15,6 +15,9 @@ const createButton = (...nodes: (string | Node)[]) => {
         const {width, height} = btn.getBoundingClientRect()
         animateClick(Math.max(width, height) * 2, width / 2, height / 2, btn)
     })
+    btn.setText = (str: string) => {
+        span.innerText = str
+    }
     return btn
 }
 

@@ -1,7 +1,7 @@
 import {grid, downIndex, cells, gridRef} from './index'
 
-const removeBlockingDominos = (): [number, number, Orientation][] => {
-    const positions: [number, number, Orientation][] = []
+const removeBlockingDominos = (): DominoPair[] => {
+    const positions: DominoPair[] = []
     for (let y = 0; y < grid.value.length; y++) {
         const row = grid.value[y]
         for (let x = 0; x < row.length; x++) {
@@ -34,21 +34,22 @@ const removeBlockingDominos = (): [number, number, Orientation][] => {
     return positions
 }
 
-const animateRemoveBlocking = (callback?: () => void) => {
-    const positions = removeBlockingDominos()
-    if (!positions.length) {
-        if (callback) setTimeout(callback)
-        return
-    }
+const animateRemoveBlocking = (positions: DominoPair[], callback?: () => void) => {
     positions.forEach(([i1, i2, dir], index) => {
         setTimeout(() => {
-            const [d1, d2] = getRemoveByIndex(i1, i2, dir)
-            d1.classList.add('animate-move', 'fade-out')
-            d2.classList.add('animate-move', 'fade-out')
             if (index === positions.length - 1 && callback)
-                d1.addEventListener('transitionend', callback, {once: true})
+                return animateRemoveBlockingDomino(i1, i2, dir, callback)
+            animateRemoveBlockingDomino(i1, i2, dir)
         }, index * 200)
     })
+}
+
+const animateRemoveBlockingDomino = (i1: number, i2: number, dir: Orientation, callback?: () => void) => {
+    const [d1, d2] = getRemoveByIndex(i1, i2, dir)
+    d1.classList.add('animate-move', 'fade-out')
+    d2.classList.add('animate-move', 'fade-out')
+    if (callback)
+        d1.addEventListener('transitionend', callback, {once: true})
 }
 
 const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [Element, Element] => {
@@ -66,5 +67,7 @@ const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [Element, E
 }
 
 export {
+    removeBlockingDominos,
+    animateRemoveBlockingDomino,
     animateRemoveBlocking
 }

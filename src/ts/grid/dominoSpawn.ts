@@ -1,7 +1,7 @@
 import {grid, downIndex, cells, gridRef, createDomino} from './index'
 
-const spawnDominos = (): [number, number, Orientation][] => {
-    const positions: [number, number, Orientation][] = []
+const spawnDominos = (): DominoPair[] => {
+    const positions: DominoPair[] = []
     for (let y = 0; y < grid.value.length; y++) {
         const row = grid.value[y]
         for (let x = 0; x < row.length; x++) {
