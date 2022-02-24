@@ -11,10 +11,10 @@
     transition: filter 200ms ease;
 }
 .btn.green {
-    background-color: hsl(var(--down-clr));
+    background-color: hsl(var(--green-clr));
 }
 .btn.blue {
-    background-color: hsl(var(--up-clr));
+    background-color: hsl(var(--blue-clr));
 }
 .btn:hover {
     filter: brightness(1.2);

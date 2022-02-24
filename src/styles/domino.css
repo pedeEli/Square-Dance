@@ -15,19 +15,19 @@
 
 .domino.up {
     grid-column: span 2;
-    background-color: hsl(var(--up-clr));
+    background-color: hsl(var(--blue-clr));
 }
 .domino.down {
     grid-column: span 2;
-    background-color: hsl(var(--down-clr));
+    background-color: hsl(var(--green-clr));
 }
 .domino.left {
     grid-row: span 2;
-    background-color: hsl(var(--left-clr));
+    background-color: hsl(var(--yellow-clr));
 }
 .domino.right {
     grid-row: span 2;
-    background-color: hsl(var(--right-clr));
+    background-color: hsl(var(--red-clr));
 }
 
 .animate-move .domino.up, .animate-move.domino.up {
