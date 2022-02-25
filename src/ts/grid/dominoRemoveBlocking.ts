@@ -52,22 +52,34 @@ const animateRemoveBlockingDomino = (i1: number, i2: number, dir: Orientation, c
         d1.addEventListener('transitionend', callback, {once: true})
 }
 
-const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [Element, Element] => {
+const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [HTMLElement, HTMLElement] => {
     if (dir === 'horizontal') {
-        const d1 = gridRef.querySelector(`[data-index="${i1}"]`)!
-        const d2 = gridRef.querySelector(`[data-index="${i2}"]`)!
+        const d1 = gridRef.querySelector(`[data-index="${i1}"]`) as HTMLElement
+        const d2 = gridRef.querySelector(`[data-index="${i2}"]`) as HTMLElement
         return [d1, d2]
     }
     if (dir === 'vertical') {
-        const d1 = gridRef.querySelector(`[data-index="${i1}"]`)!
-        const d2 = gridRef.querySelector(`[data-index="${i1 + 1}"]`)!
+        const d1 = gridRef.querySelector(`[data-index="${i1}"]`) as HTMLElement
+        const d2 = gridRef.querySelector(`[data-index="${i1 + 1}"]`) as HTMLElement
         return [d1, d2]
     }
     throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
 }
 
+const removeBlocking = (animate: boolean, positions: DominoPair[], callback?: () => void) => {
+    if (animate)
+        return animateRemoveBlocking(positions, callback)
+    positions.forEach(([i1, i2, dir]) => {
+        const [d1, d2] = getRemoveByIndex(i1, i2, dir)
+        d1.style.opacity = '0'
+        d1.style.transition = 'none'
+        d2.style.opacity = '0'
+        d2.style.transition = 'none'
+    })
+}
+
 export {
     removeBlockingDominos,
     animateRemoveBlockingDomino,
-    animateRemoveBlocking
+    removeBlocking
 }

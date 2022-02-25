@@ -1,19 +1,20 @@
 import {createButton} from './/btn'
 import {drawGrid} from '../grid/index'
-import {animateMove} from '../grid/dominoMove'
-import {animateSpawn} from '../grid/dominoSpawn'
-import {animateRemoveBlocking, removeBlockingDominos} from '../grid/dominoRemoveBlocking'
+import {move} from '../grid/dominoMove'
+import {spawn} from '../grid/dominoSpawn'
+import {removeBlocking, removeBlockingDominos} from '../grid/dominoRemoveBlocking'
 import { createSwitch } from './switch'
 
 let nextStep: Step = 'spawn'
 let started = false
 const controls = document.querySelector('[data-controls]')!
 const nextStepButton = createButton('Start')
-const temp = createSwitch('Animate', 'animate')
+const animateSwitch = createSwitch('Animate', 'animate')
+animateSwitch.on = true
 let positions: DominoPair[] = []
 
 const createControls = () => {
-    controls.append(nextStepButton, temp)
+    controls.append(nextStepButton, animateSwitch)
     nextStepButton.addEventListener('click', () => {
         if (!started) {
             started = true
@@ -29,9 +30,12 @@ const createControls = () => {
     })
 }
 
+
+
 const spawnStep = () => {
-    animateSpawn(() => nextStepButton.disabled = false)
-    nextStepButton.disabled = true
+    spawn(animateSwitch.on, () => nextStepButton.disabled = false)
+    if (animateSwitch.on)
+        nextStepButton.disabled = true
 
     positions = removeBlockingDominos()
     if (positions.length) {
@@ -43,15 +47,17 @@ const spawnStep = () => {
 }
 
 const moveStep = () => {
-    animateMove(() => nextStepButton.disabled = false)
-    nextStepButton.disabled = true
+    move(animateSwitch.on, () => nextStepButton.disabled = false)
+    if (animateSwitch.on)
+        nextStepButton.disabled = true
     nextStepButton.setText('Spawn')
     nextStep = 'spawn'
 }
 
 const removeBlockingStep = () => {
-    animateRemoveBlocking(positions, () => nextStepButton.disabled = false)
-    nextStepButton.disabled = true
+    removeBlocking(animateSwitch.on, positions, () => nextStepButton.disabled = false)
+    if (animateSwitch.on)
+        nextStepButton.disabled = true
     nextStepButton.setText('Move')
     nextStep = 'move'
 }

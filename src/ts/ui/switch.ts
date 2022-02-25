@@ -9,7 +9,8 @@ const createSwitch = (str: string, id: string) => {
     label.htmlFor = id
     label.append(checkbox, str)
     Object.defineProperty(label, 'on', {
-        get: () => checkbox.checked
+        get: () => checkbox.checked,
+        set: (value: boolean) => checkbox.checked = value
     })
     return label
 }

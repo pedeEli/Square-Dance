@@ -73,6 +73,14 @@ const animateMove = (callback?: () => void) => {
     }, {once: true})
 }
 
+const move = (animate: boolean, callback?: () => void) => {
+    if (animate)
+        return animateMove(callback)
+    increaseGrid()
+    moveGrid()
+    drawGrid()
+}
+
 export {
-    animateMove
+    move
 }
