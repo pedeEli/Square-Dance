@@ -12,6 +12,7 @@
     --bg-clr: 0 0% 10%;
 
     --blue-clr: 240 60% 50%;
+    --turquoise-clr: 199 98% 48%;
     --green-clr: 120 60% 30%;
     --yellow-clr: 60 70% 55%;
     --red-clr: 0 60% 40%;
@@ -20,6 +21,8 @@
     --btn-clr: 0 0% 20%;
     --btn-disabled-clr: 0 0% 30%;
     --btn-disabled-text-clr: 0 0% 50%;
+
+    --shadow: 0 5px 5px hsl(0 0% 0% / .3);
 }
 
 body {
@@ -35,6 +38,9 @@ body {
 
 .controls {
     border-right: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .heading {

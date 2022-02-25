@@ -3,15 +3,17 @@ import {drawGrid} from '../grid/index'
 import {animateMove} from '../grid/dominoMove'
 import {animateSpawn} from '../grid/dominoSpawn'
 import {animateRemoveBlocking, removeBlockingDominos} from '../grid/dominoRemoveBlocking'
+import { createSwitch } from './switch'
 
 let nextStep: Step = 'spawn'
 let started = false
 const controls = document.querySelector('[data-controls]')!
 const nextStepButton = createButton('Start')
+const temp = createSwitch('Animate', 'animate')
 let positions: DominoPair[] = []
 
 const createControls = () => {
-    controls.append(nextStepButton)
+    controls.append(nextStepButton, temp)
     nextStepButton.addEventListener('click', () => {
         if (!started) {
             started = true
