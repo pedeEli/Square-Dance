@@ -34,8 +34,13 @@ const removeBlockingDominos = (): DominoPair[] => {
     return positions
 }
 
-const animateRemoveBlocking = (positions: DominoPair[], callback?: () => void) => {
+const animateRemoveBlocking = (delay: boolean, positions: DominoPair[], callback?: () => void) => {
     positions.forEach(([i1, i2, dir], index) => {
+        if (!delay) {
+            if (index === positions.length - 1 && callback)
+                return animateRemoveBlockingDomino(i1, i2, dir, callback)
+            return animateRemoveBlockingDomino(i1, i2, dir)
+        }
         setTimeout(() => {
             if (index === positions.length - 1 && callback)
                 return animateRemoveBlockingDomino(i1, i2, dir, callback)
@@ -66,9 +71,9 @@ const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [HTMLElemen
     throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
 }
 
-const removeBlocking = (animate: boolean, positions: DominoPair[], callback?: () => void) => {
+const removeBlocking = (animate: boolean, delay: boolean, positions: DominoPair[], callback?: () => void) => {
     if (animate)
-        return animateRemoveBlocking(positions, callback)
+        return animateRemoveBlocking(delay, positions, callback)
     positions.forEach(([i1, i2, dir]) => {
         const [d1, d2] = getRemoveByIndex(i1, i2, dir)
         d1.style.opacity = '0'

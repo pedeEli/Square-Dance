@@ -10,11 +10,13 @@ let started = false
 const controls = document.querySelector('[data-controls]')!
 const nextStepButton = createButton('Start')
 const animateSwitch = createSwitch('Animate', 'animate')
+const delaySwitch = createSwitch('Delay', 'delay')
 animateSwitch.on = true
+delaySwitch.on = true
 let positions: DominoPair[] = []
 
 const createControls = () => {
-    controls.append(nextStepButton, animateSwitch)
+    controls.append(nextStepButton, animateSwitch, delaySwitch)
     nextStepButton.addEventListener('click', () => {
         if (!started) {
             started = true
@@ -33,7 +35,7 @@ const createControls = () => {
 
 
 const spawnStep = () => {
-    spawn(animateSwitch.on, () => nextStepButton.disabled = false)
+    spawn(animateSwitch.on, delaySwitch.on, () => nextStepButton.disabled = false)
     if (animateSwitch.on)
         nextStepButton.disabled = true
 
@@ -55,7 +57,7 @@ const moveStep = () => {
 }
 
 const removeBlockingStep = () => {
-    removeBlocking(animateSwitch.on, positions, () => nextStepButton.disabled = false)
+    removeBlocking(animateSwitch.on, delaySwitch.on, positions, () => nextStepButton.disabled = false)
     if (animateSwitch.on)
         nextStepButton.disabled = true
     nextStepButton.setText('Move')

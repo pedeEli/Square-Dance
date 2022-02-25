@@ -31,11 +31,16 @@ const spawnDominos = (): DominoPair[] => {
     return positions
 }
 
-const animateSpawn = (callback?: () => void) => {
+const animateSpawn = (delay: boolean, callback?: () => void) => {
     const positions = spawnDominos()
     positions.forEach(([i1, i2, dir], index) => {
+        if (!delay) {
+            if (index === positions.length - 1 && callback)
+                return animateSpawnDomino(i1, i2, dir, callback)
+            return animateSpawnDomino(i1, i2, dir)
+        }
         setTimeout(() => {
-            if (index === positions.length - 1)
+            if (index === positions.length - 1 && callback)
                 return animateSpawnDomino(i1, i2, dir, callback)
             animateSpawnDomino(i1, i2, dir)
         }, index * 200)
@@ -98,9 +103,9 @@ const replaceEmptiesWithDominos = (c1: Element, c3: Element, i1: number, i2: num
     throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
 }
 
-const spawn = (animate: boolean, callback?: () => void) => {
+const spawn = (animate: boolean, delay: boolean, callback?: () => void) => {
     if (animate)
-        return animateSpawn(callback)
+        return animateSpawn(delay, callback)
     const positions = spawnDominos()
     positions.forEach(([i1, i2, dir]) => {
         const c1 = gridRef.querySelector(`[data-index="${i1}"]`)!
