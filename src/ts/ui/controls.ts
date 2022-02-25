@@ -3,7 +3,8 @@ import {drawGrid} from '../grid/index'
 import {move} from '../grid/dominoMove'
 import {spawn} from '../grid/dominoSpawn'
 import {removeBlocking, removeBlockingDominos} from '../grid/dominoRemoveBlocking'
-import { createSwitch } from './switch'
+import {createSwitch} from './switch'
+import {delay} from '../util'
 
 let nextStep: Step = 'spawn'
 let positions: DominoPair[] = []
@@ -27,28 +28,40 @@ const createControls = () => {
         delaySwitch.disabled = !animateSwitch.checked
     })
 
-    nextStepButton.addEventListener('click', () => {
-        fullCycleButton.disabled = false
+    nextStepButton.addEventListener('click', async () => {
         drawGrid()
-        handleNextStep()
+        await handleNextStep()
+        fullCycleButton.disabled = false
         nextStepButton.addEventListener('click', handleNextStep)
     }, {once: true})
 
-    fullCycleButton.addEventListener('click', () => {
+    fullCycleButton.addEventListener('click', async () => {
         nextStepButton.disabled = true
+        fullCycleButton.disabled = true
         
+        if (nextStep === 'remove') {
+            await removeBlockingStep()
+            await delay(1)
+        }
+        if (nextStep === 'move')
+            await moveStep()
+        if (nextStep === 'spawn')
+            await spawnStep()
+        
+        nextStepButton.disabled = false
+        fullCycleButton.disabled = false
     })
 }
 
 
-const handleNextStep = () => {
+const handleNextStep = async () => {
     if (nextStep === 'spawn') {
-        return spawnStep()
+        return await spawnStep()
     }
     if (nextStep === 'move') {
-        return moveStep()
+        return await moveStep()
     }
-    return removeBlockingStep()
+    await removeBlockingStep()
 }
 
 const spawnStep = async () => {
