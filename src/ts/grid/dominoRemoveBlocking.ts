@@ -34,27 +34,29 @@ const removeBlockingDominos = (): DominoPair[] => {
     return positions
 }
 
-const animateRemoveBlocking = (delay: boolean, positions: DominoPair[], callback?: () => void) => {
-    positions.forEach(([i1, i2, dir], index) => {
-        if (!delay) {
-            if (index === positions.length - 1 && callback)
-                return animateRemoveBlockingDomino(i1, i2, dir, callback)
-            return animateRemoveBlockingDomino(i1, i2, dir)
-        }
-        setTimeout(() => {
-            if (index === positions.length - 1 && callback)
-                return animateRemoveBlockingDomino(i1, i2, dir, callback)
-            animateRemoveBlockingDomino(i1, i2, dir)
-        }, index * 200)
+const animateRemoveBlocking = (delay: boolean, positions: DominoPair[]) => {
+    return new Promise<void>(resolve => {
+        positions.forEach(async ([i1, i2, dir], index) => {
+            if (!delay) {
+                await animateRemoveBlockingDomino(i1, i2, dir)
+                return resolve()
+            }
+            setTimeout(async () => {
+                await animateRemoveBlockingDomino(i1, i2, dir)
+                if (index === positions.length - 1)
+                    resolve()
+            }, index * 200)
+        })
     })
 }
 
-const animateRemoveBlockingDomino = (i1: number, i2: number, dir: Orientation, callback?: () => void) => {
-    const [d1, d2] = getRemoveByIndex(i1, i2, dir)
-    d1.classList.add('animate-move', 'fade-out')
-    d2.classList.add('animate-move', 'fade-out')
-    if (callback)
-        d1.addEventListener('transitionend', callback, {once: true})
+const animateRemoveBlockingDomino = (i1: number, i2: number, dir: Orientation) => {
+    return new Promise<void>(resolve => {
+        const [d1, d2] = getRemoveByIndex(i1, i2, dir)
+        d1.classList.add('animate-move', 'fade-out')
+        d2.classList.add('animate-move', 'fade-out')
+        d1.addEventListener('transitionend', () => resolve(), {once: true})
+    })
 }
 
 const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [HTMLElement, HTMLElement] => {
@@ -71,9 +73,9 @@ const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [HTMLElemen
     throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
 }
 
-const removeBlocking = (animate: boolean, delay: boolean, positions: DominoPair[], callback?: () => void) => {
+const removeBlocking = async (animate: boolean, delay: boolean, positions: DominoPair[]) => {
     if (animate)
-        return animateRemoveBlocking(delay, positions, callback)
+        return await animateRemoveBlocking(delay, positions)
     positions.forEach(([i1, i2, dir]) => {
         const [d1, d2] = getRemoveByIndex(i1, i2, dir)
         d1.style.opacity = '0'

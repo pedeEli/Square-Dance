@@ -54,28 +54,30 @@ const moveGrid = () => {
     grid.value = newGrid
 }
 
-const animateMove = (callback?: () => void) => {
-    const size = parseInt(getComputedStyle(gridRef).getPropertyValue('--size'))
-    const targetCellSize = size / (cells.value + 2)
-    gridRef.style.setProperty('--size', `${targetCellSize * cells.value}px`)
-    gridRef.addEventListener('transitionend', () => {
-        gridRef.classList.add('animate-move')
-        setTimeout(() => {
-            gridRef.addEventListener('transitionend', () => {
-                gridRef.classList.remove('animate-move')
-                gridRef.style.setProperty('--size', `${size}px`)
-                increaseGrid()
-                moveGrid()
-                drawGrid()
-                if (callback) callback()
-            }, {once: true})
-        })
-    }, {once: true})
+const animateMove = async () => {
+    return new Promise<void>(resolve => {
+        const size = parseInt(getComputedStyle(gridRef).getPropertyValue('--size'))
+        const targetCellSize = size / (cells.value + 2)
+        gridRef.style.setProperty('--size', `${targetCellSize * cells.value}px`)
+        gridRef.addEventListener('transitionend', () => {
+            gridRef.classList.add('animate-move')
+            setTimeout(() => {
+                gridRef.addEventListener('transitionend', () => {
+                    gridRef.classList.remove('animate-move')
+                    gridRef.style.setProperty('--size', `${size}px`)
+                    increaseGrid()
+                    moveGrid()
+                    drawGrid()
+                    resolve()
+                }, {once: true})
+            })
+        }, {once: true})
+    })
 }
 
-const move = (animate: boolean, callback?: () => void) => {
+const move = async (animate: boolean) => {
     if (animate)
-        return animateMove(callback)
+        return await animateMove()
     increaseGrid()
     moveGrid()
     drawGrid()

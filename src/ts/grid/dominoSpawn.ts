@@ -31,48 +31,54 @@ const spawnDominos = (): DominoPair[] => {
     return positions
 }
 
-const animateSpawn = (delay: boolean, callback?: () => void) => {
-    const positions = spawnDominos()
-    positions.forEach(([i1, i2, dir], index) => {
-        if (!delay) {
-            if (index === positions.length - 1 && callback)
-                return animateSpawnDomino(i1, i2, dir, callback)
-            return animateSpawnDomino(i1, i2, dir)
-        }
-        setTimeout(() => {
-            if (index === positions.length - 1 && callback)
-                return animateSpawnDomino(i1, i2, dir, callback)
-            animateSpawnDomino(i1, i2, dir)
-        }, index * 200)
+const animateSpawn = (delay: boolean) => {
+    return new Promise<void>(resolve => {
+        const positions = spawnDominos()
+        positions.forEach(async ([i1, i2, dir], index) => {
+            if (!delay) {
+                await animateSpawnDomino(i1, i2, dir)
+                return resolve()
+            }
+            setTimeout(async () => {
+                await animateSpawnDomino(i1, i2, dir)
+                if (index === positions.length - 1)
+                    resolve()
+            }, index * 200)
+        })
     })
 }
 
-const animateSpawnDomino = (i1: number, i2: number, dir: Orientation, callback?: () => void) => {
-    const c1 = gridRef.querySelector(`[data-index="${i1}"]`)!
-
-    c1.classList.add('orange-box')
-    c1.addEventListener('animationend', () => {
-        const domino = fillOrangeBoxWithDominos(c1, dir)
-        animateSpawnDominoFadeIn(domino, i1, i2, dir, c1 as HTMLElement, callback)
-    }, {once: true})
+const animateSpawnDomino = (i1: number, i2: number, dir: Orientation) => {
+    return new Promise<void>(resolve => {
+        const c1 = gridRef.querySelector(`[data-index="${i1}"]`)!
+        
+        c1.classList.add('orange-box')
+        c1.addEventListener('animationend', async () => {
+            const domino = fillOrangeBoxWithDominos(c1, dir)
+            await animateSpawnDominoFadeIn(domino, i1, i2, dir, c1 as HTMLElement)
+            resolve()
+        }, {once: true})
+    })
 }
 
-const animateSpawnDominoFadeIn = (domino: Element, i1: number, i2: number, dir: Orientation, c1: HTMLElement, callback?: () => void) => {
-    const c2 = c1.nextElementSibling!
-    const c3 = gridRef.querySelector(`[data-index="${i2}"]`)!
-    const c4 = c3.nextElementSibling!
-
-    domino.addEventListener('animationend', () => {
-        c1.style.backgroundColor = 'hsl(var(--orange-clr) / 0)'
-        c1.addEventListener('transitionend', () => {
-            replaceEmptiesWithDominos(c1, c3, i1, i2, dir)
-            c1.remove()
-            c2.remove()
-            c3.remove()
-            c4.remove()
-            if (typeof callback === 'function') callback()
+const animateSpawnDominoFadeIn = (domino: Element, i1: number, i2: number, dir: Orientation, c1: HTMLElement) => {
+    return new Promise<void>(resolve => {
+        const c2 = c1.nextElementSibling!
+        const c3 = gridRef.querySelector(`[data-index="${i2}"]`)!
+        const c4 = c3.nextElementSibling!
+        
+        domino.addEventListener('animationend', () => {
+            c1.style.backgroundColor = 'hsl(var(--orange-clr) / 0)'
+            c1.addEventListener('transitionend', () => {
+                replaceEmptiesWithDominos(c1, c3, i1, i2, dir)
+                c1.remove()
+                c2.remove()
+                c3.remove()
+                c4.remove()
+                resolve()
+            }, {once: true})
         }, {once: true})
-    }, {once: true})
+    })
 }
 
 const fillOrangeBoxWithDominos = (c1: Element, dir: Orientation) => {
@@ -103,9 +109,10 @@ const replaceEmptiesWithDominos = (c1: Element, c3: Element, i1: number, i2: num
     throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
 }
 
-const spawn = (animate: boolean, delay: boolean, callback?: () => void) => {
+const spawn = async (animate: boolean, delay: boolean) => {
     if (animate)
-        return animateSpawn(delay, callback)
+        return await animateSpawn(delay)
+        
     const positions = spawnDominos()
     positions.forEach(([i1, i2, dir]) => {
         const c1 = gridRef.querySelector(`[data-index="${i1}"]`)!
