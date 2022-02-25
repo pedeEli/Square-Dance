@@ -10,6 +10,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    transition: color 200ms ease;
 }
 
 .switch input {
@@ -52,9 +53,13 @@
 }
 
 .switch input:disabled {
-    background-color: var(--btn-disabled-clr);
+    background-color: hsl(var(--btn-disabled-clr));
 }
 
 .switch input:disabled::before {
-    background-color: var(--btn-disabled-clr);
+    background-color: hsl(var(--btn-disabled-clr));
+}
+
+.switch.disabled {
+    color: hsl(var(--btn-disabled-text-clr));
 }

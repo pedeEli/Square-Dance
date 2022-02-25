@@ -15,6 +15,8 @@ animateSwitch.checked = true
 delaySwitch.checked = true
 let positions: DominoPair[] = []
 
+
+
 const createControls = () => {
     controls.append(nextStepButton, animateSwitchLabel, delaySwitchLabel)
     nextStepButton.addEventListener('click', () => {
@@ -29,6 +31,10 @@ const createControls = () => {
             return moveStep()
         }
         removeBlockingStep()
+    })
+
+    animateSwitch.addEventListener('change', () => {
+        delaySwitch.disabled = !animateSwitch.checked
     })
 }
 
