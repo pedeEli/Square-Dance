@@ -59,12 +59,14 @@ const animateMove = async () => {
         const size = parseInt(getComputedStyle(gridRef).getPropertyValue('--size'))
         const targetCellSize = size / (cells.value + 2)
         gridRef.style.setProperty('--size', `${targetCellSize * cells.value}px`)
+        gridRef.style.removeProperty('--transition-speed')
         gridRef.addEventListener('transitionend', () => {
             gridRef.classList.add('animate-move')
             setTimeout(() => {
                 gridRef.addEventListener('transitionend', () => {
                     gridRef.classList.remove('animate-move')
                     gridRef.style.setProperty('--size', `${size}px`)
+                    gridRef.style.setProperty('--transition-speed', '0')
                     increaseGrid()
                     moveGrid()
                     drawGrid()

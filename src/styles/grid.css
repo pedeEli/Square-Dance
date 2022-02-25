@@ -7,10 +7,12 @@
 .grid {
     --size: 800px;
     --cells: 2;
-    --cell-size: calc(var(--size) / var(--cells));
+    --cell-size: calc(100% / var(--cells));
     display: grid;
     grid-template-columns: repeat(var(--cells), var(--cell-size));
     grid-template-rows: repeat(var(--cells), var(--cell-size));
-
-    transition: 500ms ease;
+    width: var(--size);
+    height: var(--size);
+    
+    transition: var(--transition-speed, 500ms) ease;
 }

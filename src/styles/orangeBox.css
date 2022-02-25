@@ -7,8 +7,8 @@
     transition: background-color 500ms ease;
 
     display: grid;
-    grid-template-columns: repeat(2, calc(var(--cell-size) / 2));
-    grid-template-rows: repeat(2, calc(var(--cell-size) / 2));
+    grid-template-columns: repeat(2, 50%);
+    grid-template-rows: repeat(2, 50%);
 }
 .orange-box .domino {
     border-radius: .5rem;
