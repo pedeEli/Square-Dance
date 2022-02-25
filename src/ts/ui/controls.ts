@@ -6,7 +6,6 @@ import {removeBlocking, removeBlockingDominos} from '../grid/dominoRemoveBlockin
 import { createSwitch } from './switch'
 
 let nextStep: Step = 'spawn'
-let started = false
 let positions: DominoPair[] = []
 
 const controls = document.querySelector('[data-controls]')!
@@ -23,25 +22,17 @@ delaySwitch.checked = true
 
 const createControls = () => {
     controls.append(nextStepButton, fullCycleButton, animateSwitchLabel, delaySwitchLabel)
-    nextStepButton.addEventListener('click', async () => {
-        if (!started) {
-            started = true
-            drawGrid()
-        }
-        if (nextStep === 'spawn') {
-            return await spawnStep()
-        }
-        if (nextStep === 'move') {
-            return await moveStep()
-        }
-        await removeBlockingStep()
-    })
 
     animateSwitch.addEventListener('change', () => {
         delaySwitch.disabled = !animateSwitch.checked
     })
 
-    nextStepButton.addEventListener('click', () => fullCycleButton.disabled = false, {once: true})
+    nextStepButton.addEventListener('click', () => {
+        fullCycleButton.disabled = false
+        drawGrid()
+        handleNextStep()
+        nextStepButton.addEventListener('click', handleNextStep)
+    }, {once: true})
 
     fullCycleButton.addEventListener('click', () => {
         nextStepButton.disabled = true
@@ -50,6 +41,15 @@ const createControls = () => {
 }
 
 
+const handleNextStep = () => {
+    if (nextStep === 'spawn') {
+        return spawnStep()
+    }
+    if (nextStep === 'move') {
+        return moveStep()
+    }
+    return removeBlockingStep()
+}
 
 const spawnStep = async () => {
     nextStepButton.disabled = true
