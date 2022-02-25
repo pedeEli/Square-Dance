@@ -31,9 +31,12 @@ body {
     width: 100vw;
     background-color: hsl(var(--bg-clr));
 
+    --header-height: 5rem;
+    --controls-width: 300px;
+
     display: grid;
-    grid-template-rows: 5rem auto;
-    grid-template-columns: 300px auto;
+    grid-template-rows: var(--header-height) auto;
+    grid-template-columns: var(--controls-width) auto;
 }
 
 .controls {
