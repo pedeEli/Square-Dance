@@ -1,4 +1,5 @@
 import {grid, downIndex, cells, gridRef, createDomino} from './index'
+import {delay} from '../util'
 
 const spawnDominos = (): DominoPair[] => {
     const positions: DominoPair[] = []
@@ -31,21 +32,12 @@ const spawnDominos = (): DominoPair[] => {
     return positions
 }
 
-const animateSpawn = (delay: boolean) => {
-    return new Promise<void>(resolve => {
-        const positions = spawnDominos()
-        positions.forEach(async ([i1, i2, dir], index) => {
-            if (!delay) {
-                await animateSpawnDomino(i1, i2, dir)
-                return resolve()
-            }
-            setTimeout(async () => {
-                await animateSpawnDomino(i1, i2, dir)
-                if (index === positions.length - 1)
-                    resolve()
-            }, index * 200)
-        })
-    })
+const animateSpawn = (withDelay: boolean) => {
+    return Promise.all(spawnDominos().map(async ([i1, i2, dir], index) => {
+        if (withDelay)
+            await delay(index * 200)
+        await animateSpawnDomino(i1, i2, dir)
+    }))
 }
 
 const animateSpawnDomino = (i1: number, i2: number, dir: Orientation) => {
@@ -105,7 +97,7 @@ const spawn = async (animate: boolean, delay: boolean) => {
         return await animateSpawn(delay)
         
     const positions = spawnDominos()
-    positions.forEach(([i1, i2, dir]) => {
+    return positions.forEach(([i1, i2, dir]) => {
         const c1 = gridRef.querySelector(`[data-index="${i1}"]`)!
         const c2 = c1.nextElementSibling!
         const c3 = gridRef.querySelector(`[data-index="${i2}"]`)!

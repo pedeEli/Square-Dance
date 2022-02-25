@@ -1,4 +1,5 @@
 import {grid, downIndex, cells, gridRef} from './index'
+import {delay} from '../util'
 
 const removeBlockingDominos = (): DominoPair[] => {
     const positions: DominoPair[] = []
@@ -34,20 +35,12 @@ const removeBlockingDominos = (): DominoPair[] => {
     return positions
 }
 
-const animateRemoveBlocking = (delay: boolean, positions: DominoPair[]) => {
-    return new Promise<void>(resolve => {
-        positions.forEach(async ([i1, i2, dir], index) => {
-            if (!delay) {
-                await animateRemoveBlockingDomino(i1, i2, dir)
-                return resolve()
-            }
-            setTimeout(async () => {
-                await animateRemoveBlockingDomino(i1, i2, dir)
-                if (index === positions.length - 1)
-                    resolve()
-            }, index * 200)
-        })
-    })
+const animateRemoveBlocking = (withDelay: boolean, positions: DominoPair[]) => {
+    return Promise.all(positions.map(async ([i1, i2, dir], index) => {
+        if (withDelay)
+            await delay(index * 200)
+        await animateRemoveBlockingDomino(i1, i2, dir)
+    }))
 }
 
 const animateRemoveBlockingDomino = (i1: number, i2: number, dir: Orientation) => {
@@ -76,7 +69,7 @@ const getRemoveByIndex = (i1: number, i2: number, dir: Orientation): [HTMLElemen
 const removeBlocking = async (animate: boolean, delay: boolean, positions: DominoPair[]) => {
     if (animate)
         return await animateRemoveBlocking(delay, positions)
-    positions.forEach(([i1, i2, dir]) => {
+    return positions.forEach(([i1, i2, dir]) => {
         const [d1, d2] = getRemoveByIndex(i1, i2, dir)
         d1.style.opacity = '0'
         d1.style.transition = 'none'
