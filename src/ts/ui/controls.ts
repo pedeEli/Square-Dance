@@ -9,14 +9,14 @@ let nextStep: Step = 'spawn'
 let started = false
 const controls = document.querySelector('[data-controls]')!
 const nextStepButton = createButton('Start')
-const animateSwitch = createSwitch('Animate', 'animate')
-const delaySwitch = createSwitch('Delay', 'delay')
-animateSwitch.on = true
-delaySwitch.on = true
+const [animateSwitchLabel, animateSwitch] = createSwitch('Animate', 'animate')
+const [delaySwitchLabel, delaySwitch] = createSwitch('Delay', 'delay')
+animateSwitch.checked = true
+delaySwitch.checked = true
 let positions: DominoPair[] = []
 
 const createControls = () => {
-    controls.append(nextStepButton, animateSwitch, delaySwitch)
+    controls.append(nextStepButton, animateSwitchLabel, delaySwitchLabel)
     nextStepButton.addEventListener('click', () => {
         if (!started) {
             started = true
@@ -35,8 +35,8 @@ const createControls = () => {
 
 
 const spawnStep = () => {
-    spawn(animateSwitch.on, delaySwitch.on, () => nextStepButton.disabled = false)
-    if (animateSwitch.on)
+    spawn(animateSwitch.checked, delaySwitch.checked, () => nextStepButton.disabled = false)
+    if (animateSwitch.checked)
         nextStepButton.disabled = true
 
     positions = removeBlockingDominos()
@@ -49,16 +49,16 @@ const spawnStep = () => {
 }
 
 const moveStep = () => {
-    move(animateSwitch.on, () => nextStepButton.disabled = false)
-    if (animateSwitch.on)
+    move(animateSwitch.checked, () => nextStepButton.disabled = false)
+    if (animateSwitch.checked)
         nextStepButton.disabled = true
     nextStepButton.setText('Spawn')
     nextStep = 'spawn'
 }
 
 const removeBlockingStep = () => {
-    removeBlocking(animateSwitch.on, delaySwitch.on, positions, () => nextStepButton.disabled = false)
-    if (animateSwitch.on)
+    removeBlocking(animateSwitch.checked, delaySwitch.checked, positions, () => nextStepButton.disabled = false)
+    if (animateSwitch.checked)
         nextStepButton.disabled = true
     nextStepButton.setText('Move')
     nextStep = 'move'

@@ -50,3 +50,11 @@
     background-color: hsl(var(--turquoise-clr));
     left: calc(var(--width) - var(--size) - var(--space));
 }
+
+.switch input:disabled {
+    background-color: var(--btn-disabled-clr);
+}
+
+.switch input:disabled::before {
+    background-color: var(--btn-disabled-clr);
+}
