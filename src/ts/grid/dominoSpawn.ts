@@ -54,44 +54,35 @@ const animateSpawnDomino = (i1: number, i2: number, dir: Orientation) => {
         
         c1.classList.add('orange-box')
         c1.addEventListener('animationend', async () => {
-            const domino = fillOrangeBoxWithDominos(c1, dir)
-            await animateSpawnDominoFadeIn(domino, i1, i2, dir, c1 as HTMLElement)
+            fillOrangeBoxWithDominos(c1, dir)
+            await animateSpawnDominoFadeIn(i1, i2, dir, c1 as HTMLElement)
             resolve()
         }, {once: true})
     })
 }
 
-const animateSpawnDominoFadeIn = (domino: Element, i1: number, i2: number, dir: Orientation, c1: HTMLElement) => {
+const animateSpawnDominoFadeIn = (i1: number, i2: number, dir: Orientation, c1: HTMLElement) => {
     return new Promise<void>(resolve => {
         const c2 = c1.nextElementSibling!
         const c3 = gridRef.querySelector(`[data-index="${i2}"]`)!
         const c4 = c3.nextElementSibling!
-        
-        domino.addEventListener('animationend', () => {
-            c1.style.backgroundColor = 'hsl(var(--orange-clr) / 0)'
-            c1.addEventListener('transitionend', () => {
-                replaceEmptiesWithDominos(c1, c3, i1, i2, dir)
-                c1.remove()
-                c2.remove()
-                c3.remove()
-                c4.remove()
-                resolve()
-            }, {once: true})
+        setTimeout(() => c1.style.backgroundColor = 'hsl(var(--orange-clr) / 0)', 100)
+        c1.addEventListener('transitionend', () => {
+            replaceEmptiesWithDominos(c1, c3, i1, i2, dir)
+            c1.remove()
+            c2.remove()
+            c3.remove()
+            c4.remove()
+            resolve()
         }, {once: true})
     })
 }
 
 const fillOrangeBoxWithDominos = (c1: Element, dir: Orientation) => {
-    if (dir === 'horizontal') {
-        const domino = createDomino('up')
-        c1.append(domino, createDomino('down'))
-        return domino
-    }
-    if (dir === 'vertical') {
-        const domino = createDomino('left')
-        c1.append(domino, createDomino('right'))
-        return domino
-    }
+    if (dir === 'horizontal')
+        return c1.append(createDomino('up'), createDomino('down'))
+    if (dir === 'vertical')
+        return c1.append(createDomino('left'), createDomino('right'))
     throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
 }
 
