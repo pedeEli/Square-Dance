@@ -1,5 +1,5 @@
 import {createButton} from './/btn'
-import {drawGrid} from '../grid/index'
+import {cells, drawGrid, gridRef} from '../grid/index'
 import {move} from '../grid/dominoMove'
 import {spawn} from '../grid/dominoSpawn'
 import {removeBlocking, removeBlockingDominos} from '../grid/dominoRemoveBlocking'
@@ -80,6 +80,8 @@ const spawnStep = async () => {
 
 const moveStep = async () => {
     await move(animateSwitch.checked)
+    if (cells.value >= 55)
+        gridRef.classList.add('low-detail')
     nextStepButton.setText('Spawn')
     nextStep = 'spawn'
 }

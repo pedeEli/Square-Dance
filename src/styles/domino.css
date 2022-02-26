@@ -6,11 +6,17 @@
 
     transition: 500ms ease;
 }
+.low-detail .domino {
+    border-radius: 0;
+}
 
 .domino svg {
     fill: white;
     width: 60%;
     height: 60%;
+}
+.low-detail .domino svg {
+    display: none;
 }
 
 .domino.up {

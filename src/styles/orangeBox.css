@@ -10,9 +10,15 @@
     grid-template-columns: repeat(2, 50%);
     grid-template-rows: repeat(2, 50%);
 }
+.low-detail .orange-box {
+    border-radius: 0;
+}
 .orange-box .domino {
     border-radius: .5rem;
     animation: domino-fade-in 500ms ease forwards;
+}
+.low-detail .orange-box .domino {
+    border-radius: 0;
 }
 
 @keyframes orange-box {
