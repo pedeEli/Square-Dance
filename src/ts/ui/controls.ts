@@ -1,8 +1,9 @@
 import {findButton} from './btn'
-import {cells, drawGrid, gridRef} from '../grid/index'
+import {cells, drawGrid, grid, gridRef} from '../grid/index'
 import {move} from '../grid/dominoMove'
 import {spawn} from '../grid/dominoSpawn'
 import {removeBlocking, removeBlockingDominos} from '../grid/dominoRemoveBlocking'
+import {reset} from '../grid/reset'
 import {delay} from '../util'
 
 let nextStep: Step = 'spawn'
@@ -11,8 +12,10 @@ let positions: DominoPair[] = []
 const nextStepButton = findButton('next-step')
 const fullCycleButton = findButton('full-cycle')
 const playButton = findButton('play')
+const resetButton = findButton('reset')
 fullCycleButton.disabled = true
 playButton.disabled = true
+resetButton.disabled = true
 
 const animateSwitch = document.querySelector('[data-animate]') as HTMLInputElement
 const delaySwitch = document.querySelector('[data-delay]') as HTMLInputElement
@@ -47,6 +50,16 @@ const createControls = () => {
     })
 
     playButton.addEventListener('click', playInfinitely, {once: true})
+
+    resetButton.addEventListener('click', async () => {
+        grid.value = [['', ''], ['', '']]
+        cells.value = 2
+        nextStep = 'spawn'
+        nextStepButton.setText('Start')
+        disableButtons()
+        await reset()
+        nextStepButton.disabled = false
+    })
 }
 
 
@@ -123,11 +136,13 @@ const disableButtons = () => {
     nextStepButton.disabled = true
     fullCycleButton.disabled = true
     playButton.disabled = true
+    resetButton.disabled = true
 }
 const enableButtons = () => {
     nextStepButton.disabled = false
     fullCycleButton.disabled = false
     playButton.disabled = false
+    resetButton.disabled = false
 }
 
 

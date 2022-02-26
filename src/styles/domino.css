@@ -54,6 +54,10 @@
     animation: domino-fade-out 450ms ease forwards;
 }
 
+.reset.domino {
+    transform: scale(0);
+}
+
 @keyframes domino-fade-out {
     0% {
         opacity: 1;
