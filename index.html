@@ -9,7 +9,24 @@
 </head>
 <body>
     <h1 class="heading">Square Dance</h1>
-    <section class="controls" data-controls>
+    <section class="controls">
+        <button class="btn" data-next-step>
+            <span data-text>Start</span>
+        </button>
+        <button class="btn" data-full-cycle>
+            <span data-text>Full cycle</span>
+        </button>
+        <button class="btn" data-play>
+            <span data-text>Play</span>
+        </button>
+        <div class="switch">
+            <input data-animate type="checkbox" id="animate">
+            <label for="animate">Animate</label>
+        </div>
+        <div class="switch">
+            <input data-delay type="checkbox" id="delay">
+            <label for="delay">Delay</label>
+        </div>
     </section>
     <section class="square-dance">
         <div class="grid" data-grid></div>

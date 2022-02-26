@@ -1,31 +1,26 @@
-import {createButton} from './/btn'
+import {findButton} from './btn'
 import {cells, drawGrid, gridRef} from '../grid/index'
 import {move} from '../grid/dominoMove'
 import {spawn} from '../grid/dominoSpawn'
 import {removeBlocking, removeBlockingDominos} from '../grid/dominoRemoveBlocking'
-import {createSwitch} from './switch'
 import {delay} from '../util'
 
 let nextStep: Step = 'spawn'
 let positions: DominoPair[] = []
 
-const controls = document.querySelector('[data-controls]')!
-
-const nextStepButton = createButton('Start')
-const fullCycleButton = createButton('Full cycle')
-const playButton = createButton('Play')
+const nextStepButton = findButton('next-step')
+const fullCycleButton = findButton('full-cycle')
+const playButton = findButton('play')
 fullCycleButton.disabled = true
 playButton.disabled = true
 
-const [animateSwitchLabel, animateSwitch] = createSwitch('Animate', 'animate')
-const [delaySwitchLabel, delaySwitch] = createSwitch('Delay', 'delay')
+const animateSwitch = document.querySelector('[data-animate]') as HTMLInputElement
+const delaySwitch = document.querySelector('[data-delay]') as HTMLInputElement
 animateSwitch.checked = true
 delaySwitch.checked = true
 
 
 const createControls = () => {
-    controls.append(nextStepButton, fullCycleButton, playButton, animateSwitchLabel, delaySwitchLabel)
-
     animateSwitch.addEventListener('change', () => {
         delaySwitch.disabled = !animateSwitch.checked
     })

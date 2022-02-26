@@ -1,10 +1,8 @@
 type ButtonElement = HTMLButtonElement & {setText: (str: string) => void}
 
-const createButton = (str: string) => {
-    const btn = document.createElement('button') as ButtonElement
-    const span = document.createElement('span')
-    span.innerText = str
-    btn.append(span)
+const findButton = (data: string) => {
+    const btn = document.querySelector(`[data-${data}]`) as ButtonElement
+    const txt = btn.querySelector('[data-text]') as HTMLElement
     btn.classList.add('btn')
     btn.addEventListener('click', event => {
         const {width, height, x, y} = btn.getBoundingClientRect()
@@ -16,7 +14,7 @@ const createButton = (str: string) => {
         animateClick(Math.max(width, height) * 2, width / 2, height / 2, btn)
     })
     btn.setText = (str: string) => {
-        span.innerText = str
+        txt.innerText = str
     }
     return btn
 }
@@ -32,5 +30,5 @@ const animateClick = (size: number, x: number, y: number, btn: Element) => {
 }
 
 export {
-    createButton
+    findButton
 }
