@@ -13,7 +13,9 @@ const controls = document.querySelector('[data-controls]')!
 
 const nextStepButton = createButton('Start')
 const fullCycleButton = createButton('Full cycle')
+const playButton = createButton('Play')
 fullCycleButton.disabled = true
+playButton.disabled = true
 
 const [animateSwitchLabel, animateSwitch] = createSwitch('Animate', 'animate')
 const [delaySwitchLabel, delaySwitch] = createSwitch('Delay', 'delay')
@@ -22,7 +24,7 @@ delaySwitch.checked = true
 
 
 const createControls = () => {
-    controls.append(nextStepButton, fullCycleButton, animateSwitchLabel, delaySwitchLabel)
+    controls.append(nextStepButton, fullCycleButton, playButton, animateSwitchLabel, delaySwitchLabel)
 
     animateSwitch.addEventListener('change', () => {
         delaySwitch.disabled = !animateSwitch.checked
@@ -31,44 +33,42 @@ const createControls = () => {
     nextStepButton.addEventListener('click', async () => {
         drawGrid()
         await handleNextStep()
-        fullCycleButton.disabled = false
         nextStepButton.addEventListener('click', handleNextStep)
     }, {once: true})
 
     fullCycleButton.addEventListener('click', async () => {
-        nextStepButton.disabled = true
-        fullCycleButton.disabled = true
-        
+        disableButtons()
         if (nextStep === 'remove') {
             await removeBlockingStep()
+            if (!animateSwitch.checked)
+                nextStepButton.setText('Remove')
             await delay(1)
         }
         if (nextStep === 'move')
             await moveStep()
         if (nextStep === 'spawn')
             await spawnStep()
-        
-        nextStepButton.disabled = false
-        fullCycleButton.disabled = false
+        enableButtons()
     })
+
+    playButton.addEventListener('click', playInfinitely, {once: true})
 }
 
 
 const handleNextStep = async () => {
+    disableButtons()
     if (nextStep === 'spawn') {
-        return await spawnStep()
+        await spawnStep()
+    } else if (nextStep === 'move') {
+        await moveStep()
+    } else {
+        await removeBlockingStep()
     }
-    if (nextStep === 'move') {
-        return await moveStep()
-    }
-    await removeBlockingStep()
+    enableButtons()
 }
 
 const spawnStep = async () => {
-    nextStepButton.disabled = true
     await spawn(animateSwitch.checked, delaySwitch.checked)
-    nextStepButton.disabled = false
-
     positions = removeBlockingDominos()
     if (positions.length) {
         nextStepButton.setText('Remove')
@@ -79,19 +79,58 @@ const spawnStep = async () => {
 }
 
 const moveStep = async () => {
-    nextStepButton.disabled = true
     await move(animateSwitch.checked)
-    nextStepButton.disabled = false
     nextStepButton.setText('Spawn')
     nextStep = 'spawn'
 }
 
 const removeBlockingStep = async () => {
-    nextStepButton.disabled = true
     await removeBlocking(animateSwitch.checked, delaySwitch.checked, positions)
-    nextStepButton.disabled = false
     nextStepButton.setText('Move')
     nextStep = 'move'
+}
+
+
+const playInfinitely = async () => {
+    disableButtons()
+    playButton.disabled = false
+    let stop = false
+
+    playButton.setText('Stop')
+    playButton.addEventListener('click', () => {
+        stop = true
+        enableButtons()
+        playButton.setText('Play')
+        playButton.addEventListener('click', playInfinitely, {once: true})
+    }, {once: true})
+
+    while (true) {
+        if (stop) break
+        if (nextStep === 'remove') {
+            await removeBlockingStep()
+            await delay(1)
+        }
+        if (stop) break
+        if (nextStep === 'move')
+            await moveStep()
+        if (stop) break
+        if (nextStep === 'spawn') {
+            await spawnStep()
+            await delay(1)
+        }
+    }
+}
+
+
+const disableButtons = () => {
+    nextStepButton.disabled = true
+    fullCycleButton.disabled = true
+    playButton.disabled = true
+}
+const enableButtons = () => {
+    nextStepButton.disabled = false
+    fullCycleButton.disabled = false
+    playButton.disabled = false
 }
 
 
