@@ -1,0 +1,67 @@
+.switch {
+    --width: 4rem;
+    --height: 2rem;
+    --scale: 1.3;
+    --size: calc(var(--height) * var(--scale));
+    --space: calc((var(--height) - var(--size)) / 2);
+    all: unset;
+    font-size: 1.5rem;
+    margin: .5em;
+    display: flex;
+    align-items: center;
+    transition: color 200ms ease;
+}
+
+.switch input {
+    appearance: none;
+    width: var(--width);
+    height: var(--height);
+    background-color: hsl(var(--btn-clr));
+    border-radius: 100vh;
+    margin-right: calc(.5rem - var(--space));
+    cursor: pointer;
+    position: relative;
+    transition: 200ms ease;
+    box-shadow: var(--shadow);
+}
+.switch label {
+    cursor: pointer;
+}
+
+.switch input:checked {
+    background-color: hsl(var(--turquoise-clr));
+}
+
+.switch input::before {
+    content: "";
+    position: absolute;
+    background-color: hsl(var(--btn-clr));
+    width: var(--size);
+    height: var(--size);
+    top: var(--space);
+    left: var(--space);
+    border-radius: 50%;
+    transition: 200ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    box-shadow: var(--shadow);
+}
+
+.switch input:checked::before {
+    background-color: hsl(var(--turquoise-clr));
+    left: calc(var(--width) - var(--size) - var(--space));
+}
+
+.switch input:disabled {
+    background-color: hsl(var(--btn-disabled-clr));
+}
+
+.switch input:disabled::before {
+    background-color: hsl(var(--btn-disabled-clr));
+}
+
+.switch :disabled + label {
+    color: hsl(var(--btn-disabled-text-clr));
+}

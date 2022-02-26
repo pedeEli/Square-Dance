@@ -1,0 +1,25 @@
+.square-dance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid {
+    --margins: 2rem;
+    --constant-size: min(
+        calc(100vw - var(--controls-width) - 2 * var(--margins)),
+        calc(100vh - var(--header-height) - 2 * var(--margins)));
+    --cells: 2;
+    --cell-size: calc(100% / var(--cells));
+    display: grid;
+    grid-template-columns: repeat(var(--cells), var(--cell-size));
+    grid-template-rows: repeat(var(--cells), var(--cell-size));
+    width: var(--size, var(--constant-size));
+    height: var(--size, var(--constant-size));
+    
+    transition: var(--transition-speed, 500ms) ease;
+}
+
+.grid.shrink {
+    --size: calc(var(--constant-size) / (var(--cells) + 2) * var(--cells));
+}
