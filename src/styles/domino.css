@@ -3,11 +3,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-
-    transition: 500ms ease;
 }
 .low-detail .domino {
     border-radius: 0;
+}
+.animate-move .domino {
+    transition: transform 500ms ease;
+}
+.domino.removed {
+    opacity: 0;
 }
 
 .domino svg {
@@ -52,6 +56,11 @@
 .domino.fade-out {
     transition: 700ms ease;
     animation: domino-fade-out 450ms ease forwards;
+}
+
+.reset.domino {
+    transform: scale(0);
+    transition: transform 500ms ease;
 }
 
 @keyframes domino-fade-out {

@@ -1,10 +1,12 @@
-import './styles/main.css'
-import './styles/domino.css'
-import './styles/grid.css'
-import './styles/orangeBox.css'
-import './styles/btn.css'
-import './styles/switch.css'
+import '@css/main.css'
+import '@css/domino.css'
+import '@css/grid.css'
+import '@css/orangeBox.css'
+import '@css/btn.css'
+import '@css/switch.css'
 
-import {createControls} from './ts/ui/controls'
+import {initControls} from '@ts/ui/controls'
+import {initState} from '@ts/state'
 
-createControls()
+initState()
+initControls()
