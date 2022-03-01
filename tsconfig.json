@@ -12,7 +12,11 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "paths": {
+      "@ts/*": ["./src/ts/*"],
+      "@css/*": ["./src/styles/*"]
+    }
   },
   "include": ["src"]
 }
