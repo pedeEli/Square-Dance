@@ -8,11 +8,14 @@ import {animateMove} from '@ts/animate/grid/move'
 import {animateSpawn, replaceWithDominoPair} from '@ts/animate/grid/spawn'
 import {animateRemove, makeInvisible} from '@ts/animate/grid/remove'
 import {animateReset} from '@ts/animate/grid/reset'
+import {delay} from '@ts/util'
 
 // spawn --------------------------------------
-const spawn = async (animate: boolean, delay: boolean, positions: DominoPair[]) => {
-    if (animate)
-        await animateSpawn(delay, positions)
+const spawn = async (animate: boolean, withDelay: boolean, positions: DominoPair[]) => {
+    if (animate) {
+        await delay(1)
+        await animateSpawn(withDelay, positions)
+    }
     saveSpawn(positions)
     positions.forEach(replaceWithDominoPair)
 }
