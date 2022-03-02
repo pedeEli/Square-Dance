@@ -1,3 +1,5 @@
+import {waitForEvent} from '@ts/util'
+
 type ButtonElement = HTMLButtonElement & {setText: (str: string) => void}
 
 const findButton = (data: string) => {
@@ -19,14 +21,15 @@ const findButton = (data: string) => {
     return btn
 }
 
-const animateClick = (size: number, x: number, y: number, btn: Element) => {
+const animateClick = async (size: number, x: number, y: number, btn: Element) => {
     const div = document.createElement('div')
     btn.append(div)
     btn.classList.add('clicked')
     div.style.setProperty('--x', `${x}px`)
     div.style.setProperty('--y', `${y}px`)
     div.style.setProperty('--size', `${size}px`)
-    div.addEventListener('animationend', () => div.remove(), {once: true})
+    await waitForEvent(div, 'animationend')
+    div.remove()
 }
 
 export {
