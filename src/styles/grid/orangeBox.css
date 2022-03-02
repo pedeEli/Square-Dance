@@ -1,26 +1,15 @@
 .orange-box {
     background-color: hsl(var(--orange-clr));
     transform-origin: top left;
-    animation: orange-box 500ms ease forwards;
     border-radius: .5rem;
-
+    
     transition: background-color 500ms ease;
+    animation: orange-box 500ms ease forwards;
 
     display: grid;
     grid-template-columns: repeat(2, 50%);
     grid-template-rows: repeat(2, 50%);
 }
-.low-detail .orange-box {
-    border-radius: 0;
-}
-.orange-box .domino {
-    border-radius: .5rem;
-    animation: domino-fade-in 500ms ease forwards;
-}
-.low-detail .orange-box .domino {
-    border-radius: 0;
-}
-
 @keyframes orange-box {
     0% {
         transform: scale(0, 0);
@@ -34,6 +23,11 @@
     }
 }
 
+/* fade in domino -------------------------- */
+.orange-box .domino {
+    border-radius: .5rem;
+    animation: domino-fade-in 500ms ease forwards;
+}
 @keyframes domino-fade-in {
     0% {
         opacity: 0;
@@ -42,3 +36,13 @@
         opacity: 1;
     }
 }
+/* ----------------------------------------- */
+
+/* low detail ------------------------------ */
+.low-detail .orange-box {
+    border-radius: 0;
+}
+.low-detail .orange-box .domino {
+    border-radius: 0;
+}
+/* ----------------------------------------- */

@@ -1,0 +1,22 @@
+@media screen and (max-height: 610px) {
+    :root {
+        font-size: 12px;
+    }
+}
+@media screen and (max-width: 550px) {
+    :root {
+        font-size: 12px;
+    }
+}
+
+
+@media screen and (max-height: 460px) {
+    :root {
+        font-size: 10px;
+    }
+}
+@media screen and (max-width: 410px) {
+    :root {
+        font-size: 10px;
+    }
+}

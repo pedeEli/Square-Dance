@@ -4,25 +4,11 @@
     align-items: center;
     justify-content: center;
 }
-.low-detail .domino {
-    border-radius: 0;
-}
-.animate-move .domino {
-    transition: transform 500ms ease;
-}
-.domino.removed {
-    opacity: 0;
-}
-
 .domino svg {
     fill: white;
     width: 60%;
     height: 60%;
 }
-.low-detail .domino svg {
-    display: none;
-}
-
 .domino.up {
     grid-column: span 2;
     background-color: hsl(var(--blue-clr));
@@ -40,6 +26,10 @@
     background-color: hsl(var(--red-clr));
 }
 
+/* move ------------------------------------ */
+.animate-move .domino {
+    transition: transform 500ms ease;
+}
 .animate-move .domino.up, .animate-move.domino.up {
     transform: translateY(-100%);
 }
@@ -52,17 +42,16 @@
 .animate-move .domino.right, .animate-move.domino.right {
     transform: translateX(100%);
 }
+/* ----------------------------------------- */
 
+/* remove ---------------------------------- */
+.domino.removed {
+    opacity: 0;
+}
 .domino.fade-out {
     transition: 700ms ease;
     animation: domino-fade-out 450ms ease forwards;
 }
-
-.reset.domino {
-    transform: scale(0);
-    transition: transform 500ms ease;
-}
-
 @keyframes domino-fade-out {
     0% {
         opacity: 1;
@@ -71,3 +60,20 @@
         opacity: 0;
     }
 }
+/* ----------------------------------------- */
+
+/* reset ----------------------------------- */
+.reset.domino {
+    transform: scale(0);
+    transition: transform 500ms ease;
+}
+/* ----------------------------------------- */
+
+/* low detail ------------------------------ */
+.low-detail .domino {
+    border-radius: 0;
+}
+.low-detail .domino svg {
+    display: none;
+}
+/* ----------------------------------------- */

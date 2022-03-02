@@ -4,7 +4,6 @@
     align-items: center;
     justify-content: center;
 }
-
 .grid {
     --margins: 2rem;
     --constant-size: min(
@@ -21,13 +20,16 @@
     transition: var(--transition-speed, 500ms) ease;
 }
 
+/* increase grid --------------------------- */
 .grid.shrink {
     --size: calc(var(--constant-size) / (var(--cells) + 2) * var(--cells));
 }
+/* ----------------------------------------- */
 
-
+/* vertical -------------------------------- */
 .vertical .grid {
     --constant-size: min(
         calc(100vw - 2 * var(--margins)),
         calc(100vh - var(--header-height) - var(--controls-height) - 2 * var(--margins)));
 }
+/* ----------------------------------------- */

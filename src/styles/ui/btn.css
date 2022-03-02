@@ -13,28 +13,10 @@
         background-color 200ms ease,
         color 200ms ease;
 }
-.btn.green {
-    background-color: hsl(var(--green-clr));
-}
-.btn.blue {
-    background-color: hsl(var(--blue-clr));
-}
-.btn:hover:enabled {
-    filter: brightness(1.2);
-}
-.btn:focus {
-    outline: 2px solid white;
-}
-.btn:disabled {
-    background-color: hsl(var(--btn-disabled-clr));
-    color: hsl(var(--btn-disabled-text-clr));
-}
-
 .btn span {
     position: relative;
     z-index: 1;
 }
-
 .btn div {
     content: "";
     position: absolute;
@@ -48,6 +30,25 @@
     transform-origin: center;
     animation: expand 800ms ease-out forwards;
 }
+
+/* hover ----------------------------------- */
+.btn:hover:enabled {
+    filter: brightness(1.2);
+}
+/* ----------------------------------------- */
+
+/* focus ----------------------------------- */
+.btn:focus {
+    outline: 2px solid white;
+}
+/* ----------------------------------------- */
+
+/* disabled -------------------------------- */
+.btn:disabled {
+    background-color: hsl(var(--btn-disabled-clr));
+    color: hsl(var(--btn-disabled-text-clr));
+}
+/* ----------------------------------------- */
 
 @keyframes expand {
     0% {

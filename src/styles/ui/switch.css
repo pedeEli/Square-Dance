@@ -11,7 +11,6 @@
     align-items: center;
     transition: color 200ms ease;
 }
-
 .switch input {
     appearance: none;
     -moz-appearance: none;
@@ -23,17 +22,9 @@
     margin-right: calc(.5rem - var(--space));
     cursor: pointer;
     position: relative;
-    transition: 200ms ease;
+    transition: background-color 200ms ease;
     box-shadow: var(--shadow);
 }
-.switch label {
-    cursor: pointer;
-}
-
-.switch input:checked {
-    background-color: hsl(var(--turquoise-clr));
-}
-
 .switch input::before {
     content: "";
     position: absolute;
@@ -43,27 +34,52 @@
     top: var(--space);
     left: var(--space);
     border-radius: 50%;
-    transition: 200ms ease;
+    transition:
+        background-color 200ms ease,
+        left 200ms ease;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 100;
     box-shadow: var(--shadow);
 }
+.switch label {
+    cursor: pointer;
+}
 
+/* hover ----------------------------------- */
+.switch input:hover:enabled {
+    filter: brightness(1.2);
+}
+/* ----------------------------------------- */
+
+/* focus ----------------------------------- */
+.switch input:focus {
+    outline: 2px solid white;
+}
+.switch input:focus::before {
+    outline: 2px solid white;
+}
+/* ----------------------------------------- */
+
+/* checked --------------------------------- */
+.switch input:checked {
+    background-color: hsl(var(--turquoise-clr));
+}
 .switch input:checked::before {
     background-color: hsl(var(--turquoise-clr));
     left: calc(var(--width) - var(--size) - var(--space));
 }
+/* ----------------------------------------- */
 
+/* disabled -------------------------------- */
 .switch input:disabled {
     background-color: hsl(var(--btn-disabled-clr));
 }
-
 .switch input:disabled::before {
     background-color: hsl(var(--btn-disabled-clr));
 }
-
 .switch :disabled + label {
     color: hsl(var(--btn-disabled-text-clr));
 }
+/* ----------------------------------------- */
