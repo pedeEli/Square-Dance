@@ -67,3 +67,12 @@ body.vertical {
         "controls";
 }
 /* ----------------------------------------- */
+
+
+/* body.info {
+    grid-template-rows: var(--header-height) 1fr;
+    grid-template-columns: 100vw;
+    grid-template-areas:
+        "header"
+        "info";
+} */

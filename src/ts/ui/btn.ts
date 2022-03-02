@@ -7,11 +7,12 @@ const findButton = (data: string) => {
     const txt = btn.querySelector('[data-text]') as HTMLElement
     btn.classList.add('btn')
     btn.addEventListener('click', event => {
+        if (event.x === 0 && event.y === 0) return
         const {width, height, x, y} = btn.getBoundingClientRect()
         animateClick(Math.max(width, height) * 2, event.x - x, event.y - y, btn)
     })
     btn.addEventListener('keydown', event => {
-        if (event.key !== 'Enter') return
+        if (event.key !== 'Enter' && event.key !== ' ') return
         const {width, height} = btn.getBoundingClientRect()
         animateClick(Math.max(width, height) * 2, width / 2, height / 2, btn)
     })

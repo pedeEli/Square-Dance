@@ -33,3 +33,9 @@
         calc(100vh - var(--header-height) - var(--controls-height) - 2 * var(--margins)));
 }
 /* ----------------------------------------- */
+
+
+
+/* .info .grid {
+    display: none;
+} */
