@@ -1,6 +1,5 @@
-let state: State
+let stateObj: SaveState
 
-type DeepReadonly<O extends object> = {readonly [K in keyof O]: O[K] extends object ? DeepReadonly<O[K]> : O[K]}
 type Optional<O extends object> = {[K in keyof O]?: O[K]}
 
 const initState = () => {
@@ -8,27 +7,27 @@ const initState = () => {
         Object.entries(defaultState)
             .forEach(([key, value]) => localStorage.setItem(key, JSON.stringify(value)))
     
-    let s: Optional<State> = {}
-    const keys = Object.keys(defaultState) as Array<keyof State>
+    let s: Optional<SaveState> = {}
+    const keys = Object.keys(defaultState) as Array<keyof SaveState>
     keys.forEach((key) => {
         const value = JSON.parse(localStorage.getItem(key)!)
         s[key] = value
     })
-    state = s as State
+    stateObj = s as SaveState
 }
 
-const saveState = <T extends keyof State>(key: T, value: State[T]) => {
-    if (!state) throw new Error('state has to be initialized')
-    state[key] = value
+const saveState = <T extends keyof SaveState>(key: T, value: SaveState[T]) => {
+    if (!saveState) throw new Error('SaveState has to be initialized')
+    stateObj[key] = value
     localStorage.setItem(key, JSON.stringify(value))
 }
 
-const getState = <T extends keyof State>(key: T): State[T] => {
-    if (!state) throw new Error('state has to be initialized')
-    return state[key]
+const getState = <T extends keyof SaveState>(key: T): SaveState[T] => {
+    if (!saveState) throw new Error('SaveState has to be initialized')
+    return stateObj[key]
 }
 
-const defaultState: DeepReadonly<State> = {
+const defaultState: DeepReadonly<SaveState> = {
     animate: true,
     delay: true,
     cells: 2,
@@ -36,9 +35,12 @@ const defaultState: DeepReadonly<State> = {
     nextStep: 'spawn'
 }
 
+const state: State<SaveState> = {
+    saveState, getState
+}
+
 export {
     initState,
-    saveState,
-    getState,
+    state,
     defaultState
 }

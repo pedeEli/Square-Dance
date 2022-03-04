@@ -9,10 +9,19 @@ declare type Step = 'move' | 'spawn' | 'remove'
 declare type DominoPair = [number, number, Orientation]
 declare type Domino = [number, Dir]
 
-declare interface State {
+declare interface SaveState extends GridState {
     animate: boolean,
     delay: boolean,
-    grid: GridRow[],
-    cells: number,
-    nextStep: Step
+    nextStep: Step,
 }
+declare interface GridState {
+    grid: GridRow[],
+    cells: number
+}
+declare interface State<S extends object> {
+    saveState: <K extends keyof S>(key: K, value: S[K]) => void,
+    getState: <K extends keyof S>(key: K) => S[K]
+}
+
+
+declare type DeepReadonly<O extends object> = {readonly [K in keyof O]: O[K] extends object ? DeepReadonly<O[K]> : O[K]}

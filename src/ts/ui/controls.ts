@@ -2,11 +2,14 @@ import {findButton} from '@ts/ui/btn'
 import {getSpawnPositions} from '@ts/animate/grid/spawn'
 import {getRemovePositions} from '@ts/animate/grid/remove'
 import {delay} from '@ts/util'
-import {getState, saveState} from '@ts/state'
+import {defaultState, state} from '@ts/state'
 import {move, spawn, remove, reset} from '@ts/grid/actions'
-import {drawGrid, gridRef} from '@ts/grid/util'
+import {drawGrid} from '@ts/grid/util'
 
+const {getState, saveState} = state
 let positions: DominoPair[]
+
+const gridRef = document.querySelector('[data-grid]') as HTMLDivElement
 
 const nextStepButton = findButton('next-step')
 const fullCycleButton = findButton('full-cycle')
@@ -26,7 +29,7 @@ const initControls = () => {
     if (getState('cells') >= 55)
         gridRef.classList.add('low-detail')
     if (start) return
-    drawGrid()
+    drawGrid(gridRef, state)
 }
 const initSwitches = () => {
     animateSwitch.checked = getState('animate')
@@ -56,7 +59,7 @@ const initButtons = (start: boolean) => {
 
 // next step ----------------------------------
 const nextStepHandler = async () => {
-    drawGrid()
+    drawGrid(gridRef, state)
     if (getState('cells') === 2 && getState('nextStep') === 'spawn')
         await executeNextStep()
     enableButtons()
@@ -76,14 +79,14 @@ const executeNextStep = async () => {
     enableButtons()
 }
 const spawnStep = async () => {
-    positions = getSpawnPositions()
-    await spawn(animateSwitch.checked, delaySwitch.checked, positions)
-    positions = getRemovePositions()
+    positions = getSpawnPositions(state)
+    await spawn(gridRef, animateSwitch.checked, delaySwitch.checked, positions, state)
+    positions = getRemovePositions(state)
     positions.length ? saveState('nextStep', 'remove') : saveState('nextStep', 'move')
     setNextStepButtonText()
 }
 const moveStep = async () => {
-    await move(animateSwitch.checked)
+    await move(gridRef, animateSwitch.checked, state)
     if (getState('cells') >= 55)
         gridRef.classList.add('low-detail')
     saveState('nextStep', 'spawn')
@@ -91,8 +94,8 @@ const moveStep = async () => {
 }
 const removeBlockingStep = async () => {
     if (!positions)
-        positions = getRemovePositions()
-    await remove(animateSwitch.checked, delaySwitch.checked, positions)
+        positions = getRemovePositions(state)
+    await remove(gridRef, animateSwitch.checked, delaySwitch.checked, positions, state)
     saveState('nextStep', 'move')
     setNextStepButtonText()
 }
@@ -119,7 +122,8 @@ const fullCycleHandler = async () => {
 // reset --------------------------------------
 const resetHandler = async () => {
     disableButtons()
-    await reset(animateSwitch.checked, delaySwitch.checked)
+    await reset(gridRef, animateSwitch.checked, delaySwitch.checked, state, defaultState)
+    saveState('nextStep', defaultState.nextStep)
     nextStepButton.disabled = false
     setNextStepButtonText()
     nextStepButton.removeEventListener('click', executeNextStep)

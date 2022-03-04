@@ -1,8 +1,7 @@
 import {delay, waitForEvent} from '@ts/util'
-import {downIndex, toIndex, gridRef} from '@ts/grid/util'
-import {getState} from '@ts/state'
+import {downIndex, toIndex} from '@ts/grid/util'
 
-const getRemovePositions = (): DominoPair[] => {
+const getRemovePositions = <S extends GridState>({getState}: State<S>): DominoPair[] => {
     const cells = getState('cells')
     const grid = getState('grid')
     const positions: DominoPair[] = []
@@ -33,35 +32,35 @@ const getRemovePositions = (): DominoPair[] => {
     return positions
 }
 
-const animateRemove = (withDelay: boolean, positions: DominoPair[]) => Promise.all(
+const animateRemove = (ref: HTMLElement, withDelay: boolean, positions: DominoPair[]) => Promise.all(
     positions.map(async (dominoPair, index) => {
         if (withDelay)
             await delay(index * 200)
-        await animateSingle(dominoPair)
+        await animateSingle(ref, dominoPair)
     }))
 
-const animateSingle = async (dominoPair: DominoPair) => {
-    const [d1, d2] = fromDominoPair(dominoPair)
+const animateSingle = async (ref: HTMLElement, dominoPair: DominoPair) => {
+    const [d1, d2] = fromDominoPair(ref, dominoPair)
     d1.classList.add('animate-move', 'fade-out')
     d2.classList.add('animate-move', 'fade-out')
     await waitForEvent(d1, 'transitionend')
 }
 
-const makeInvisible = (dominoPair: DominoPair) => {
-    const [d1, d2] = fromDominoPair(dominoPair)
+const makeInvisible = (ref: HTMLElement) => (dominoPair: DominoPair) => {
+    const [d1, d2] = fromDominoPair(ref, dominoPair)
     d1.classList.add('removed')
     d2.classList.add('removed')
 }
 
-const fromDominoPair = ([i1, i2, dir]: DominoPair): [HTMLElement, HTMLElement] => {
+const fromDominoPair = (ref: HTMLElement, [i1, i2, dir]: DominoPair): [HTMLElement, HTMLElement] => {
     if (dir === 'horizontal') {
-        const d1 = gridRef.querySelector(`[data-index="${i1}"]`) as HTMLElement
-        const d2 = gridRef.querySelector(`[data-index="${i2}"]`) as HTMLElement
+        const d1 = ref.querySelector(`[data-index="${i1}"]`) as HTMLElement
+        const d2 = ref.querySelector(`[data-index="${i2}"]`) as HTMLElement
         return [d1, d2]
     }
     if (dir === 'vertical') {
-        const d1 = gridRef.querySelector(`[data-index="${i1}"]`) as HTMLElement
-        const d2 = gridRef.querySelector(`[data-index="${i1 + 1}"]`) as HTMLElement
+        const d1 = ref.querySelector(`[data-index="${i1}"]`) as HTMLElement
+        const d2 = ref.querySelector(`[data-index="${i1 + 1}"]`) as HTMLElement
         return [d1, d2]
     }
     throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)

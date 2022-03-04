@@ -1,8 +1,7 @@
-import {gridRef} from '@ts/grid/util'
 import {delay, waitForEvent} from '@ts/util'
 
-const animateReset = (withDelay: boolean) => {
-    const dominos = [...(gridRef.querySelectorAll('.domino') as any as HTMLElement[])]
+const animateReset = (ref: HTMLElement, withDelay: boolean) => {
+    const dominos = [...(ref.querySelectorAll('.domino') as any as HTMLElement[])]
     return Promise.all(dominos.map(async (domino, index) => {
         if (withDelay)
             await delay(index * 500 * Math.log(dominos.length) / dominos.length)

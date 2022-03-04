@@ -2,8 +2,7 @@ import {
     fromIndex, toIndex,
     downIndex, upIndex,
     oldToNewIndex,
-    drawGrid, gridRef} from '@ts/grid/util'
-import {getState, saveState, defaultState} from '@ts/state'
+    drawGrid} from '@ts/grid/util'
 import {animateMove} from '@ts/animate/grid/move'
 import {animateSpawn, replaceWithDominoPair} from '@ts/animate/grid/spawn'
 import {animateRemove, makeInvisible} from '@ts/animate/grid/remove'
@@ -11,15 +10,15 @@ import {animateReset} from '@ts/animate/grid/reset'
 import {delay} from '@ts/util'
 
 // spawn --------------------------------------
-const spawn = async (animate: boolean, withDelay: boolean, positions: DominoPair[]) => {
+const spawn = async <S extends GridState>(ref: HTMLElement, animate: boolean, withDelay: boolean, positions: DominoPair[], state: State<S>) => {
     if (animate) {
         await delay(1)
-        await animateSpawn(withDelay, positions)
+        await animateSpawn(ref, withDelay, positions)
     }
-    saveSpawn(positions)
-    positions.forEach(replaceWithDominoPair)
+    saveSpawn(positions, state)
+    positions.forEach(replaceWithDominoPair(ref))
 }
-const saveSpawn = (positions: DominoPair[]) => {
+const saveSpawn = <S extends GridState>(positions: DominoPair[], {getState, saveState}: State<S>) => {
     const grid = getState('grid')
     const cells = getState('cells')
     positions.forEach(([i1, i2, dir]) => {
@@ -43,13 +42,13 @@ const saveSpawn = (positions: DominoPair[]) => {
 // --------------------------------------------
 
 // move ---------------------------------------
-const move = async (animate: boolean) => {
+const move = async <S extends GridState>(ref: HTMLElement, animate: boolean, state: State<S>) => {
     if (animate)
-        await animateMove()
-    saveMove()
-    drawGrid()
+        await animateMove(ref)
+    saveMove(state)
+    drawGrid(ref, state)
 }
-const saveMove = () => {
+const saveMove = <S extends GridState>({getState, saveState}: State<S>) => {
     const grid = getState('grid')
     const cells = getState('cells')
     const ncells = cells + 2
@@ -89,13 +88,13 @@ const saveMove = () => {
 // --------------------------------------------
 
 // remove -------------------------------------
-const remove = async (animate: boolean, delay: boolean, positions: DominoPair[]) => {
+const remove = async <S extends GridState>(ref: HTMLElement, animate: boolean, delay: boolean, positions: DominoPair[], state: State<S>) => {
     if (animate)
-        await animateRemove(delay, positions)
-    saveRemove(positions)
-    positions.forEach(makeInvisible)
+        await animateRemove(ref, delay, positions)
+    saveRemove(positions, state)
+    positions.forEach(makeInvisible(ref))
 }
-const saveRemove = (positions: DominoPair[]) => {
+const saveRemove = <S extends GridState>(positions: DominoPair[], {getState, saveState}: State<S>) => {
     const grid = getState('grid')
     const cells = getState('cells')
     positions.forEach(([i1, i2, _]) => {
@@ -111,17 +110,16 @@ const saveRemove = (positions: DominoPair[]) => {
 // --------------------------------------------
 
 // reset --------------------------------------
-const reset = async (animate: boolean, delay: boolean) => {
+const reset = async <S extends GridState, D extends DeepReadonly<GridState>>(ref: HTMLElement, animate: boolean, delay: boolean, state: State<S>, defaultState: D) => {
     if (animate)
-        await animateReset(delay)
-    saveReset()
-    gridRef.classList.remove('low-detail')
-    drawGrid()
+        await animateReset(ref, delay)
+    saveReset(state, defaultState)
+    ref.classList.remove('low-detail')
+    drawGrid(ref, state)
 }
-const saveReset = () => {
+const saveReset = <S extends GridState, D extends DeepReadonly<GridState>>({saveState}: State<S>, defaultState: D) => {
     saveState('cells', defaultState.cells)
     saveState('grid', [...defaultState.grid.map(row => [...row])])
-    saveState('nextStep', defaultState.nextStep)
 }
 // --------------------------------------------
 

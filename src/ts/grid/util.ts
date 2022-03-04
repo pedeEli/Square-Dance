@@ -1,18 +1,20 @@
-import {getState} from '@ts/state'
-
 // grid ---------------------------------------
-const gridRef = document.querySelector('[data-grid]') as HTMLDivElement
-const arrows = {
-    up: document.querySelector('[data-up-arrow]') as HTMLTemplateElement,
-    down: document.querySelector('[data-down-arrow]') as HTMLTemplateElement,
-    left: document.querySelector('[data-left-arrow]') as HTMLTemplateElement,
-    right: document.querySelector('[data-right-arrow]') as HTMLTemplateElement
+const viewBox = {
+    up: '0 0 384 512',
+    down: '0 0 384 512',
+    left: '0 0 448 512',
+    right: '0 0 448 512'
 }
 const createDomino = (dir: Dir, index: number = -1) => {
-    const div = document.createElement('div')
-    div.classList.add('domino', dir)
-    div.appendChild(arrows[dir].content.cloneNode(true))
+    const div = document.createElement('div') as HTMLElement
     div.dataset.index = `${index}`
+    div.classList.add('domino', dir)
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+    svg.setAttributeNS(null, 'viewBox', viewBox[dir])
+    svg.appendChild(use)
+    use.setAttributeNS(null, 'href', `#${dir}-arrow`)
+    div.appendChild(svg)
     return div
 }
 const createEmpty = (index: number) => {
@@ -28,29 +30,29 @@ const createBuffer = (l: number, index: number, side: 'left' | 'right') => {
     div.dataset.side = side
     return div
 }
-const drawGrid = () => {
+const drawGrid = <S extends GridState>(ref: HTMLElement, {getState}: State<S>) => {
     const cells = getState('cells')
     const grid = getState('grid')
-    gridRef.style.setProperty('--cells', `${cells}`)
-    while (gridRef.firstChild)
-        gridRef.firstChild.remove()
+    ref.style.setProperty('--cells', `${cells}`)
+    while (ref.firstChild)
+        ref.firstChild.remove()
     const created = new Set()
 
     for (let y = 0; y < grid.length; y++) {
         const row = grid[y]
         const emptySize = Math.floor(Math.abs(y - cells / 2 + .5))
         if (emptySize)
-            gridRef.appendChild(createBuffer(emptySize, y, 'left'))
+            ref.appendChild(createBuffer(emptySize, y, 'left'))
 
         for (let x = 0; x < row.length; x++) {
             if (created.has(toIndex(x, y, cells))) continue
             const cell = row[x]
             if (!cell) {
-                gridRef.appendChild(createEmpty(toIndex(x, y, cells)))
+                ref.appendChild(createEmpty(toIndex(x, y, cells)))
                 continue
             }
             
-            gridRef.appendChild(createDomino(cell, toIndex(x, y, cells)))
+            ref.appendChild(createDomino(cell, toIndex(x, y, cells)))
             if (cell.match(/up|down/)) {
                 created.add(toIndex(x + 1, y, cells))
                 continue
@@ -60,7 +62,7 @@ const drawGrid = () => {
         }
         
         if (emptySize)
-            gridRef.appendChild(createBuffer(emptySize, y, 'right'))
+            ref.appendChild(createBuffer(emptySize, y, 'right'))
     }
 }
 // --------------------------------------------
@@ -98,8 +100,6 @@ const oldToNewIndex = (i1: number, cells: number, ncells: number) => {
 // --------------------------------------------
 
 export {
-    gridRef,
-    arrows,
     createDomino,
     createEmpty,
     createBuffer,

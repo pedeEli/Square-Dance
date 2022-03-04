@@ -1,8 +1,7 @@
 import {delay, waitForEvent} from '@ts/util'
-import {toIndex, downIndex, gridRef, createDomino} from '@ts/grid/util'
-import {getState} from '@ts/state'
+import {toIndex, downIndex, createDomino} from '@ts/grid/util'
 
-const getSpawnPositions = (): DominoPair[] => {
+const getSpawnPositions = <S extends GridState>({getState}: State<S>): DominoPair[] => {
     const cells = getState('cells')
     const grid = getState('grid')
     const positions: DominoPair[] = []
@@ -25,15 +24,15 @@ const getSpawnPositions = (): DominoPair[] => {
     return positions
 }
 
-const animateSpawn = (withDelay: boolean, positions: DominoPair[]) => Promise.all(
+const animateSpawn = (ref: HTMLElement, withDelay: boolean, positions: DominoPair[]) => Promise.all(
     positions.map(async (dominoPair, index) => {
         if (withDelay)
             await delay(index * 200)
-        await animateSingle(dominoPair)
+        await animateSingle(ref, dominoPair)
     }))
 
-const animateSingle = async ([i1, _, dir]: DominoPair) => {
-    const c1 = gridRef.querySelector(`[data-index="${i1}"]`) as HTMLElement
+const animateSingle = async (ref: HTMLElement, [i1, _, dir]: DominoPair) => {
+    const c1 = ref.querySelector(`[data-index="${i1}"]`) as HTMLElement
     
     c1.classList.add('orange-box')
     await waitForEvent(c1, 'animationend')
@@ -52,10 +51,10 @@ const fillOrangeBox = (box: Element, dir: Orientation) => {
     throw new Error(`${dir} is not a valid direction. Must be 'horizontal' or 'vertical'`)
 }
 
-const replaceWithDominoPair = ([i1, i2, dir]: DominoPair) => {
-    const c1 = gridRef.querySelector(`[data-index="${i1}"]`)!
+const replaceWithDominoPair = (ref: HTMLElement) => ([i1, i2, dir]: DominoPair) => {
+    const c1 = ref.querySelector(`[data-index="${i1}"]`)!
     const c2 = c1.nextElementSibling!
-    const c3 = gridRef.querySelector(`[data-index="${i2}"]`)!
+    const c3 = ref.querySelector(`[data-index="${i2}"]`)!
     const c4 = c3.nextElementSibling!
     if (dir === 'horizontal') {
         c1.after(createDomino('up', i1))
