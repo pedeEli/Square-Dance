@@ -6,17 +6,14 @@
     padding: 2rem;
     font-size: 1.3em;
 }
-
 .info .info-section {
     display: flex;
     flex-direction: column;
 }
-
 .info-section > div {
     max-width: 70ch;
     width: 100%;
 }
-
 .info-section .hidden {
     display: none;
 }
@@ -27,21 +24,89 @@
     align-items: center;
     justify-content: space-evenly;
 }
-.aztec-diamonds .size-four.frame {
-    stroke: hsl(var(--green-clr));
+
+
+.size-two.image {
+    width: 6em;
+    height: 6em;
 }
-.aztec-diamonds .size-four {
+.size-two.grid {
+    --constant-size: 6em;
+    --cells: 2;
+}
+
+
+.size-four.image {
     width: 12em;
-    height: 12em;
+    height: 12em
+}
+.size-four.grid {
     --constant-size: 12em;
     --cells: 4;
 }
-.aztec-diamonds .size-six.frame {
-    stroke: hsl(var(--blue-clr));
-}
-.aztec-diamonds .size-six {
-    height: 18em;
+
+
+.size-six.image {
     width: 18em;
+    height: 18em;
+}
+.size-six.grid {
     --constant-size: 18em;
     --cells: 6;
+}
+
+
+.size-six.frame {
+    stroke: hsl(var(--blue-clr));
+}
+.size-four.frame {
+    stroke: hsl(var(--green-clr));
+}
+
+
+.checkerboard .bright {
+    fill: rgb(190, 190, 190);
+}
+.checkerboard .dark {
+    fill: rgb(73, 73, 73);
+}
+
+
+.grid.with-bg {
+    position: relative;
+}
+.grid.with-bg .domino {
+    --alpha: .8;
+}
+.grid.with-bg .checkerboard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+
+.size-four.with-bg .checkerboard.big {
+    top: -3em;
+    left: -3em;
+    width: 12em;
+    height: 12em;
+    transition:
+        opacity var(--grid-shrink-speed) ease,
+        top var(--grid-shrink-speed) ease,
+        left var(--grid-shrink-speed) ease;
+}
+.checkerboard {
+    opacity: 1;
+    transition: opacity var(--grid-shrink-speed) ease;
+}
+.checkerboard.opaque {
+    opacity: 0;
+}
+
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    font-size: .8em;
 }

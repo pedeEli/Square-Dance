@@ -25,3 +25,10 @@ declare interface State<S extends object> {
 
 
 declare type DeepReadonly<O extends object> = {readonly [K in keyof O]: O[K] extends object ? DeepReadonly<O[K]> : O[K]}
+
+
+declare interface InfoPage {
+    init?: () => void,
+    show?: () => void,
+    hide?: () => void
+}

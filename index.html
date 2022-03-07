@@ -46,10 +46,10 @@
                 What is a aztec diamond board? This is
             </p>
             <div class="aztec-diamonds">
-                <svg class="size-four frame" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+                <svg class="size-four image frame" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
                     <path d="M11 0 L11 41 L31 41 L31 1 L11 1 M21 1 L21 41 M0 11 L41 11 L41 31 L1 31 L1 11 M1 21 L41 21" stroke-width="2" fill="none"/>
                 </svg>
-                <svg class="size-six frame" viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg">
+                <svg class="size-six image frame" viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 0 L21 61 L41 61 L41 1 L21 1 M31 1 L31 61 M0 21 L61 21 L61 41 L1 41 L1 21 M1 31 L 61 31 M10 11 L51 11 L51 51 L11 51 L11 11" fill="none" stroke-width="2"/>
                 </svg>
             </div>
@@ -90,6 +90,64 @@
                 You just place dominos randomly on the diamond so that every square (pixel) is covered.
                 I'll get to what the colors mean on the next section.
             </p>
+        </div>
+        <div data-section>
+            <p>
+                To understand what the colors mean we have to draw the underlying aztec diamond with a checkerboard pattern.
+                All horizontal dominos can be put into two categories. Either the domino has under his left side a black pixel or
+                under his right side. Depending on that i color it green or blue. The same is true for vertical dominos.
+                Categorising the dominos like that gives us a realy nice visualization for the <span class="square-dance-text">Square Dance</span> later.
+            </p>
+            <div class="aztec-diamonds">
+                <svg class="size-four checkerboard image" viewBox="0 0 40 40">
+                    <use href="#checkerboard-four"></use>
+                </svg>
+                <div class="grid size-four with-bg">
+                    <div></div>
+                    <div class="domino up"></div>
+                    <div></div>
+                    <div class="domino up"></div>
+                    <div class="domino left"></div>
+                    <div class="domino right"></div>
+                    <div class="domino down"></div>
+                    <div></div>
+                    <div class="domino down"></div>
+                    <svg class="checkerboard" viewBox="0 0 40 40"><use href="#checkerboard-four"></use></svg>
+                </div>
+            </div>
+            <p>
+                So what is the <span class="square-dance-text">Square Dance</span>. We start by generating the smallest possible aztec diamond
+                which is a two-by-two square. For such a diamond there are only two different possible tilings. One with two horizontal dominos
+                and one with two vertical dominos.
+            </p>
+            <div class="aztec-diamonds">
+                <div class="grid size-two" data-horizontal-example>
+                </div>
+                <div class="grid size-two" data-vertical-example>
+                </div>
+            </div>
+            <p>
+                The arrows represent the first step in the <span class="square-dance-text">Square Dance</span>. You increase the size
+                of the aztec diamond and move the dominos in the direction of the arrow.
+            </p>
+            <div class="aztec-diamonds size-four">
+                <div class="size-four image center">
+                    <div class="grid size-four with-bg" data-horizontal-animation>
+                        <svg data-two class="checkerboard" viewBox="0 0 40 40"><use href="#checkerboard-two"></use></svg>
+                        <svg data-four class="checkerboard opaque" viewBox="0 0 40 40"><use href="#checkerboard-four"></use></svg>
+                    </div>
+                </div>
+                <div class="size-four image center">
+                    <div class="grid size-four with-bg" data-vertical-animation>
+                        <svg data-two class="checkerboard" viewBox="0 0 40 40"><use href="#checkerboard-two"></use></svg>
+                        <svg data-four class="checkerboard opaque" viewBox="0 0 40 40"><use href="#checkerboard-four"></use></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navigation">
+            <button class="btn" data-previous>Previous</button>
+            <button class="btn" data-next>Next</button>
         </div>
     </section>
 

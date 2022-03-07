@@ -1,6 +1,7 @@
 import '@css/main.css'
 
 import {initControls} from '@ts/ui/controls'
+import {initInfo} from '@ts/ui/info'
 import {initState} from '@ts/state'
 
 const adjustLayout = () => {
@@ -16,3 +17,4 @@ document.body.classList.add('info')
 
 initState()
 initControls()
+initInfo()
