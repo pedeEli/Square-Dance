@@ -7,6 +7,7 @@ import {animateMove} from '@ts/animate/grid/move'
 import {animateSpawn, replaceWithDominoPair} from '@ts/animate/grid/spawn'
 import {animateRemove, makeInvisible} from '@ts/animate/grid/remove'
 import {animateReset} from '@ts/animate/grid/reset'
+import {animateCreate} from '@ts/animate/grid/create'
 import {delay} from '@ts/util'
 
 // spawn --------------------------------------
@@ -123,9 +124,36 @@ const saveReset = <S extends GridState, D extends DeepReadonly<GridState>>({save
 }
 // --------------------------------------------
 
+// create -------------------------------------
+const create = async <S extends GridState>(ref: HTMLElement, animate: boolean, withDelay: boolean, positions: Domino[], state: State<S>) => {
+    if (animate)
+        await animateCreate(ref, withDelay, positions, state.getState('cells'))
+    saveCreate(positions, state)
+    drawGrid(ref, state)
+}
+const saveCreate = <S extends GridState>(positions: Domino[], {saveState, getState}: State<S>) => {
+    const grid = getState('grid')
+    const cells = getState('cells')
+    positions.forEach(([i, dir]) => {
+        const [x, y] = fromIndex(i, cells)
+        if (dir.match(/up|down/)) {
+            grid[y][x] = dir
+            grid[y][x + 1] = dir
+            return
+        }
+        const x_ = downIndex(x, y, cells)
+        grid[y][x] = dir
+        grid[y + 1][x_] = dir
+    })
+    saveState('grid', grid)
+}
+// --------------------------------------------
+
+
 export {
     move,
     spawn,
     remove,
-    reset
+    reset,
+    create
 }

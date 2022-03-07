@@ -69,6 +69,20 @@
 }
 /* ----------------------------------------- */
 
+/* create ---------------------------------- */
+.animate-create.domino {
+    animation: domino-create var(--domino-create-speed) ease;
+}
+@keyframes domino-create {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+/* ----------------------------------------- */
+
 /* low detail ------------------------------ */
 .low-detail .domino {
     border-radius: 0;

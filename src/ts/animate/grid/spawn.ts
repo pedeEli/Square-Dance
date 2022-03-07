@@ -38,7 +38,7 @@ const animateSingle = async (ref: HTMLElement, [i1, _, dir]: DominoPair) => {
     await waitForEvent(c1, 'animationend')
     
     fillOrangeBox(c1, dir)
-    delay(100)
+    await delay(100)
     c1.style.backgroundColor = 'hsl(var(--orange-clr) / 0)'
     await waitForEvent(c1, 'transitionend')
 }

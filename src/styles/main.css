@@ -31,6 +31,7 @@
     --domino-fade-out-speed: 450ms;
     --domino-fade-in-speed: 500ms;
     --domino-reset-speed: 500ms;
+    --domino-create-speed: 500ms;
     
     --orange-box-scale-in-speed: 500ms;
     --orange-box-fade-out-speed: 500ms;

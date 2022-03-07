@@ -1,6 +1,6 @@
 import {createDomino, drawGrid} from '@ts/grid/util'
 import {delay, waitForEvent} from '@ts/util'
-import {move, reset, spawn} from '@ts/grid/actions'
+import {create, move, reset, spawn} from '@ts/grid/actions'
 const horizontalExample = document.querySelector('[data-horizontal-example]') as HTMLElement
 const verticalExample = document.querySelector('[data-vertical-example]') as HTMLElement
 
@@ -16,14 +16,14 @@ let hidden = true
 const show = async () => {
     hidden = false
 
-    const horizontal = startAnimationLoop(horizontalAnimation, 'horizontal')
-    const vertical = startAnimationLoop(verticalAnimation, 'vertical')
+    const horizontal = startAnimationLoop(horizontalAnimation, [[0, 'up'], [2, 'down']])
+    const vertical = startAnimationLoop(verticalAnimation, [[0, 'left'], [1, 'right']])
     while (!hidden) {
         await Promise.all([horizontal.next(), vertical.next()])
     }
 }
 
-async function* startAnimationLoop(ref: HTMLElement, dir: Orientation) {
+async function* startAnimationLoop(ref: HTMLElement, positions: [Domino, Domino]) {
     const two = ref.querySelector('[data-two]') as HTMLElement
     const four = ref.querySelector('[data-four]') as HTMLElement
 
@@ -44,9 +44,9 @@ async function* startAnimationLoop(ref: HTMLElement, dir: Orientation) {
 
     drawGrid(ref, stateModifier)
     while (true) {
-        yield delay(1000)
-        yield spawn(ref, true, false, [[0, 2, dir]], stateModifier)
-        yield delay(1000)
+        yield delay(500)
+        yield create(ref, true, false, positions, stateModifier)
+        yield delay(500)
         two.classList.add('opaque')
         four.classList.remove('opaque')
         four.classList.add('big')

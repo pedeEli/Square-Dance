@@ -69,13 +69,13 @@ const drawGrid = <S extends GridState>(ref: HTMLElement, {getState}: State<S>) =
 
 
 // index --------------------------------------
-const fromIndex = (index: number, width: number): [number, number] => {
-    const x = index % width
-    const y = Math.floor(index / width)
+const fromIndex = (index: number, cells: number): [number, number] => {
+    const x = index % cells
+    const y = Math.floor(index / cells)
     return [x, y]
 }
-const toIndex = (x: number, y: number, width: number): number => {
-    return y * width + x
+const toIndex = (x: number, y: number, cells: number): number => {
+    return y * cells + x
 }
 const upIndex = (x: number, y: number, cells: number) => {
     return x + Math.sign(y - cells / 2)
