@@ -11,24 +11,24 @@
 }
 .domino.up {
     grid-column: span 2;
-    background-color: hsl(var(--blue-clr));
+    background-color: hsl(var(--blue-clr) / var(--alpha, 1));
 }
 .domino.down {
     grid-column: span 2;
-    background-color: hsl(var(--green-clr));
+    background-color: hsl(var(--green-clr) / var(--alpha, 1));
 }
 .domino.left {
     grid-row: span 2;
-    background-color: hsl(var(--yellow-clr));
+    background-color: hsl(var(--yellow-clr) / var(--alpha, 1));
 }
 .domino.right {
     grid-row: span 2;
-    background-color: hsl(var(--red-clr));
+    background-color: hsl(var(--red-clr) / var(--alpha, 1));
 }
 
 /* move ------------------------------------ */
 .animate-move .domino {
-    transition: transform 500ms ease;
+    transition: transform var(--domino-move-speed) ease;
 }
 .animate-move .domino.up, .animate-move.domino.up {
     transform: translateY(-100%);
@@ -49,8 +49,8 @@
     opacity: 0;
 }
 .domino.fade-out {
-    transition: 700ms ease;
-    animation: domino-fade-out 450ms ease forwards;
+    transition: var(--domino-remove-speed) ease;
+    animation: domino-fade-out var(--domino-fade-out-speed) ease forwards;
 }
 @keyframes domino-fade-out {
     0% {
@@ -65,7 +65,7 @@
 /* reset ----------------------------------- */
 .reset.domino {
     transform: scale(0);
-    transition: transform 500ms ease;
+    transition: transform var(--domino-reset-speed) ease;
 }
 /* ----------------------------------------- */
 

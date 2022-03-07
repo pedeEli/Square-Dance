@@ -3,8 +3,8 @@
     transform-origin: top left;
     border-radius: .5rem;
     
-    transition: background-color 500ms ease;
-    animation: orange-box 500ms ease forwards;
+    transition: background-color var(--orange-box-fade-out-speed) ease;
+    animation: orange-box var(--orange-box-scale-in-speed) ease forwards;
 
     display: grid;
     grid-template-columns: repeat(2, 50%);
@@ -26,7 +26,7 @@
 /* fade in domino -------------------------- */
 .orange-box .domino {
     border-radius: .5rem;
-    animation: domino-fade-in 500ms ease forwards;
+    animation: domino-fade-in var(--domino-fade-in-speed) ease forwards;
 }
 @keyframes domino-fade-in {
     0% {

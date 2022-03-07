@@ -1,0 +1,47 @@
+.info-section {
+    display: none;
+    grid-area: info;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    font-size: 1.3em;
+}
+
+.info .info-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-section > div {
+    max-width: 70ch;
+    width: 100%;
+}
+
+.info-section .hidden {
+    display: none;
+}
+
+
+.aztec-diamonds {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.aztec-diamonds .size-four.frame {
+    stroke: hsl(var(--green-clr));
+}
+.aztec-diamonds .size-four {
+    width: 12em;
+    height: 12em;
+    --constant-size: 12em;
+    --cells: 4;
+}
+.aztec-diamonds .size-six.frame {
+    stroke: hsl(var(--blue-clr));
+}
+.aztec-diamonds .size-six {
+    height: 18em;
+    width: 18em;
+    --constant-size: 18em;
+    --cells: 6;
+}

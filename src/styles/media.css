@@ -14,6 +14,10 @@
     :root {
         font-size: 10px;
     }
+
+    .info {
+        font-size: 12px;
+    }
 }
 @media screen and (max-width: 410px) {
     :root {

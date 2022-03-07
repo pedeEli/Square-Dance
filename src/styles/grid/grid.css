@@ -16,13 +16,14 @@
     grid-template-rows: repeat(var(--cells), var(--cell-size));
     width: var(--size, var(--constant-size));
     height: var(--size, var(--constant-size));
-    
-    transition: var(--transition-speed, 500ms) ease;
 }
 
 /* increase grid --------------------------- */
 .grid.shrink {
     --size: calc(var(--constant-size) / (var(--cells) + 2) * var(--cells));
+    transition:
+        width var(--grid-shrink-speed) ease,
+        height var(--grid-shrink-speed) ease;
 }
 /* ----------------------------------------- */
 
@@ -35,7 +36,8 @@
 /* ----------------------------------------- */
 
 
-
-/* .info .grid {
+/* info ------------------------------------ */
+.info .square-dance {
     display: none;
-} */
+}
+/* ----------------------------------------- */

@@ -1,6 +1,6 @@
 .btn {
     all: unset;
-    font-size: 1.5rem;
+    font-size: 1.5em;
     margin: .5em;
     padding: .5em 1em;
     background-color: hsl(var(--btn-clr));

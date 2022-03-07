@@ -12,5 +12,7 @@ const adjustLayout = () => {
 adjustLayout()
 window.addEventListener('resize', adjustLayout)
 
+document.body.classList.add('info')
+
 initState()
 initControls()

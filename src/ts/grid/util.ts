@@ -34,8 +34,8 @@ const drawGrid = <S extends GridState>(ref: HTMLElement, {getState}: State<S>) =
     const cells = getState('cells')
     const grid = getState('grid')
     ref.style.setProperty('--cells', `${cells}`)
-    while (ref.firstChild)
-        ref.firstChild.remove()
+    const gridElements = [...ref.querySelectorAll('div') as any as Element[]]
+    gridElements.forEach(element => element.remove())
     const created = new Set()
 
     for (let y = 0; y < grid.length; y++) {

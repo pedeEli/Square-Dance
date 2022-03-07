@@ -36,8 +36,67 @@
         <div class="grid" data-grid></div>
     </section>
 
+    <section class="info-section" data-info>
+        <div data-section>
+            <p>
+                Hi. This is a interactive blog which explores something called <span class="square-dance-text">Square Dance</span>. 
+                If you have no idea what i'm talking about i highly recommend to watch <a href="https://www.youtube.com/watch?v=Yy7Q8IWNfHM" target="_blank">this</a> video
+                by the talanted Math-YouTuber Mathologer. The short answer is that <span class="square-dance-text">Square Dance</span> is a method
+                to create a randomly tiled aztec diamond board of increasing size. But what does that mean? Let's break the statement down.<br/>
+                What is a aztec diamond board? This is
+            </p>
+            <div class="aztec-diamonds">
+                <svg class="size-four frame" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 0 L11 41 L31 41 L31 1 L11 1 M21 1 L21 41 M0 11 L41 11 L41 31 L1 31 L1 11 M1 21 L41 21" stroke-width="2" fill="none"/>
+                </svg>
+                <svg class="size-six frame" viewBox="0 0 62 62" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 0 L21 61 L41 61 L41 1 L21 1 M31 1 L31 61 M0 21 L61 21 L61 41 L1 41 L1 21 M1 31 L 61 31 M10 11 L51 11 L51 51 L11 51 L11 11" fill="none" stroke-width="2"/>
+                </svg>
+            </div>
+            <p>Basically it's a square rotated 45° and then approximated with pixels. And what is a random tiling of such board you might ask?</p>
+            <div class="aztec-diamonds">
+                <div class="grid size-four">
+                    <div></div>
+                    <div class="domino up"></div>
+                    <div></div>
+                    <div class="domino up"></div>
+                    <div class="domino left"></div>
+                    <div class="domino right"></div>
+                    <div class="domino down"></div>
+                    <div></div>
+                    <div class="domino down"></div>
+                </div>
+                <div class="grid size-six">
+                    <div style="grid-column: span 2"></div>
+                    <div class="domino up"></div>
+                    <div style="grid-column: span 2"></div>
+                    <div></div>
+                    <div class="domino left"></div>
+                    <div class="domino down"></div>
+                    <div class="domino right"></div>
+                    <div></div>
+                    <div class="domino left"></div>
+                    <div class="domino up"></div>
+                    <div class="domino right"></div>
+                    <div class="domino left"></div>
+                    <div class="domino right"></div>
+                    <div class="domino left"></div>
+                    <div class="domino right"></div>
+                    <div style="grid-column: span 2"></div>
+                    <div class="domino down"></div>
+                </div>
+            </div>
+            <p>
+                You just place dominos randomly on the diamond so that every square (pixel) is covered.
+                I'll get to what the colors mean on the next section.
+            </p>
+        </div>
+    </section>
+
+
+
     <svg width="0" height="0" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="checkerboard">
+        <symbol class="checkerboard" id="checkerboard-four">
             <rect class="bright" width="10" height="10" x="10" y="0"/>
             <rect class="dark" width="10" height="10" x="20" y="0"/>
             <rect class="bright" width="10" height="10" x="0" y="10"/>
@@ -50,6 +109,12 @@
             <rect class="bright" width="10" height="10" x="30" y="20"/>
             <rect class="dark" width="10" height="10" x="10" y="30"/>
             <rect class="bright" width="10" height="10" x="20" y="30"/>
+        </symbol>
+        <symbol class="checkerboard" id="checkerboard-two">
+            <rect class="dark" width="20" height="20" x="0" y="0"/>
+            <rect class="bright" width="20" height="20" x="20" y="0"/>
+            <rect class="bright" width="20" height="20" x="0" y="20"/>
+            <rect class="dark" width="20" height="20" x="20" y="20"/>
         </symbol>
     </svg>
     <svg xmlns="http://www.w3.org/2000/svg" width="384" height="512" style="display: none;">
