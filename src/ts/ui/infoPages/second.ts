@@ -15,11 +15,15 @@ const init = () => {
 let hidden = true
 const show = async () => {
     hidden = false
-    startAnimationLoop(horizontalAnimation, 'horizontal')
-    startAnimationLoop(verticalAnimation, 'vertical')
+
+    const horizontal = startAnimationLoop(horizontalAnimation, 'horizontal')
+    const vertical = startAnimationLoop(verticalAnimation, 'vertical')
+    while (!hidden) {
+        await Promise.all([horizontal.next(), vertical.next()])
+    }
 }
 
-const startAnimationLoop = async (ref: HTMLElement, dir: Orientation) => {
+async function* startAnimationLoop(ref: HTMLElement, dir: Orientation) {
     const two = ref.querySelector('[data-two]') as HTMLElement
     const four = ref.querySelector('[data-four]') as HTMLElement
 
@@ -40,25 +44,21 @@ const startAnimationLoop = async (ref: HTMLElement, dir: Orientation) => {
 
     drawGrid(ref, stateModifier)
     while (true) {
-        await delay(1000)
-        if (hidden) break
-        await spawn(ref, true, false, [[0, 2, dir]], stateModifier)
-        await delay(1000)
-        if (hidden) break
+        yield delay(1000)
+        yield spawn(ref, true, false, [[0, 2, dir]], stateModifier)
+        yield delay(1000)
         two.classList.add('opaque')
         four.classList.remove('opaque')
         four.classList.add('big')
-        await Promise.all([
+        yield Promise.all([
             move(ref, true, stateModifier),
             waitForEvent(two, 'transitionend')
         ])
-        if (hidden) break
         four.classList.remove('big')
-        await delay(1000)
-        if (hidden) break
+        yield delay(1000)
         two.classList.remove('opaque')
         four.classList.add('opaque')
-        await Promise.all([
+        yield Promise.all([
             reset(ref, true, false, stateModifier, {
                 grid: [['', ''], ['', '']],
                 cells: 2
