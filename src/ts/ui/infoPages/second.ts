@@ -1,6 +1,6 @@
 import {createDomino, drawGrid} from '@ts/grid/util'
 import {delay, waitForEvent} from '@ts/util'
-import {create, move, reset, spawn} from '@ts/grid/actions'
+import {create, move, reset} from '@ts/grid/actions'
 const horizontalExample = document.querySelector('[data-horizontal-example]') as HTMLElement
 const verticalExample = document.querySelector('[data-vertical-example]') as HTMLElement
 

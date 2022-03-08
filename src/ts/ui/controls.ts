@@ -1,9 +1,10 @@
 import {findButton} from '@ts/ui/btn'
 import {getSpawnPositions} from '@ts/animate/grid/spawn'
 import {getRemovePositions} from '@ts/animate/grid/remove'
+import {getCreatePositions} from '@ts/animate/grid/create'
 import {delay} from '@ts/util'
 import {defaultState, state} from '@ts/state'
-import {move, spawn, remove, reset} from '@ts/grid/actions'
+import {move, spawn, remove, reset, create} from '@ts/grid/actions'
 import {drawGrid} from '@ts/grid/util'
 
 const {getState, saveState} = state
@@ -29,7 +30,26 @@ const initControls = () => {
     if (getState('cells') >= 55)
         gridRef.classList.add('low-detail')
     if (start) return
-    drawGrid(gridRef, state)
+    if (!getState('animate')) {
+        drawGrid(gridRef, state)
+        return
+    }
+
+    const cells = getState('cells')
+    const tempState: GridState = {
+        cells,
+        grid: Array<true>(cells).fill(true).map<GridRow>((_, i) => {
+            const length = cells - 2 * Math.floor(Math.abs(i - cells / 2 + .5))
+            return Array<''>(length).fill('')
+        })
+    }
+    const tempStateModifier: State<GridState> = {
+        getState: (key) => tempState[key],
+        saveState: () => {}
+    }
+    drawGrid(gridRef, tempStateModifier)
+    const positions = getCreatePositions(state)
+    create(gridRef, true, getState('delay'), positions, state)
 }
 const initSwitches = () => {
     animateSwitch.checked = getState('animate')
